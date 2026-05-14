@@ -54,6 +54,19 @@
             font-family: 'Playfair Display', serif;
         }
 
+        .logo-container {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .tagline {
+            font-size: 12px;
+            color: var(--primary);
+            font-family: 'Inter', sans-serif;
+            font-weight: 400;
+        }
+
         .nav-links {
             display: flex;
             list-style: none;
@@ -329,7 +342,10 @@
 </head>
 <body>
     <nav>
-        <div class="logo">Susan's Company</div>
+        <div class="logo-container">
+            <div class="logo">Susan's Company</div>
+            <div class="tagline">Modest Fashion & Books — Nairobi</div>
+        </div>
         <ul class="nav-links">
             <li><a href="#home">Home</a></li>
             <li><a href="#clothes">Clothes</a></li>
