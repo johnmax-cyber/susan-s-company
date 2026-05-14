@@ -187,13 +187,36 @@
 
         .product-img {
             height: 220px;
-            background: var(--primary);
+            background: linear-gradient(135deg, var(--primary) 0%, #2a4a6f 100%);
             display: flex;
             align-items: center;
             justify-content: center;
             color: white;
-            font-size: 16px;
-            font-weight: 500;
+            font-size: 24px;
+            font-weight: 600;
+            font-family: 'Playfair Display', serif;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .product-img::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 20% 20%, rgba(255,255,255,0.1) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        .clothes .product-img {
+            background: linear-gradient(135deg, var(--primary) 0%, #2a4a6f 100%);
+        }
+
+        .books .product-img {
+            background: linear-gradient(135deg, var(--primary) 0%, #3a5a7f 100%);
         }
 
         .product-info {
@@ -311,6 +334,30 @@
         footer .small {
             font-size: 14px;
             color: rgba(255, 255, 255, 0.7);
+        }
+
+        .whatsapp-float {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: #25D366;
+            color: white;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            text-decoration: none;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            z-index: 1001;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .whatsapp-float:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
         }
 
         @media (max-width: 768px) {
@@ -448,6 +495,8 @@
         <p>Susan's Company © 2025 — Nairobi, Kenya</p>
         <p class="small">Quality clothing and books for the community</p>
     </footer>
+
+    <a href="https://wa.me/254700000000" class="whatsapp-float">💬</a>
 
     <script>
         document.getElementById('menuToggle').addEventListener('click', function() {
