@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Susan's Company - Nairobi</title>
+    <style>
+        /* ===== CSS Variables (Brand Colors) ===== */
+        :root {
+            --primary: #1a4a2e;    /* dark green */
+            --secondary: #c9a84c;  /* gold */
+            --background: #ffffff; /* white */
+            --text-color: #333333; /* dark grey */
+        }
+
+        /* ===== Global Styles ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: var(--background);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        /* ===== Header ===== */
+        header {
+            background-color: var(--primary);
+            color: var(--background);
+            padding: 30px 40px;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 2rem;
+            margin-bottom: 5px;
+        }
+
+        header h1 span {
+            color: var(--secondary);
+        }
+
+        header p {
+            font-size: 1rem;
+            opacity: 0.85;
+        }
+
+        .shop-now-btn {
+            margin-top: 15px;
+            padding: 12px 30px;
+            font-size: 1rem;
+            background-color: var(--secondary);
+            color: var(--primary);
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .shop-now-btn:hover {
+            opacity: 0.9;
+        }
+
+        /* ===== Navigation ===== */
+        nav {
+            background-color: var(--primary);
+            color: var(--secondary);
+            padding: 12px 0;
+            text-align: center;
+            position: relative;
+            min-height: 44px;
+        }
+
+        nav a {
+            color: var(--secondary);
+            margin: 0 20px;
+            font-size: 0.95rem;
+        }
+
+        nav a:hover {
+            color: var(--background);
+        }
+
+        .nav-links {
+            display: block;
+        }
+
+        /* ===== Mobile Menu ===== */
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--secondary);
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 8px 12px;
+            position: absolute;
+            right: 8px;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 10;
+        }
+
+        @media (max-width: 768px) {
+            nav {
+                text-align: left;
+                padding: 10px;
+            }
+
+            .menu-toggle {
+                display: block;
+            }
+
+            .nav-links {
+                display: none;
+                padding: 15px 0;
+            }
+
+            nav.active .nav-links {
+                display: block;
+            }
+
+            .nav-links a {
+                display: block;
+                margin: 10px 0;
+            }
+        }
+
+        /* ===== Main Content ===== */
+        main {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .section {
+            margin-bottom: 50px;
+        }
+
+        .section h2 {
+            color: var(--primary);
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            padding-bottom: 8px;
+            border-bottom: 3px solid var(--secondary);
+            display: inline-block;
+        }
+
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .product-card {
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            overflow: hidden;
+            background-color: var(--background);
+        }
+
+        .product-card .img-placeholder {
+            width: 100%;
+            height: 200px;
+            background-color: #f0f0f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #aaa;
+            font-size: 0.9rem;
+        }
+
+        .product-card .card-body {
+            padding: 15px;
+        }
+
+        .product-card h3 {
+            color: var(--primary);
+            margin-bottom: 6px;
+            font-size: 1rem;
+        }
+
+        .product-card p {
+            font-size: 0.85rem;
+            color: #666;
+            margin-bottom: 10px;
+        }
+
+        .product-card .price {
+            color: var(--secondary);
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+
+        /* ===== Footer ===== */
+        footer {
+            background-color: var(--primary);
+            color: var(--background);
+            text-align: center;
+            padding: 20px 40px;
+        }
+
+        footer a {
+            color: var(--secondary);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header>
+        <h1>Susan's <span>Company</span></h1>
+        <p>Nairobi, Kenya — Quality Books & Clothes</p>
+        <button class="shop-now-btn" id="shopNowBtn">Shop Now</button>
+    </header>
+
+    <!-- Navigation -->
+    <nav id="navbar">
+        <button class="menu-toggle" id="menuToggle">☰</button>
+        <div class="nav-links">
+            <a href="#books">Books</a>
+            <a href="#clothes">Clothes</a>
+            <a href="#contact">Contact</a>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main>
+
+        <!-- Books Section -->
+        <section id="books" class="section">
+            <h2>Books</h2>
+            <div class="product-grid">
+                <div class="product-card">
+                    <div class="img-placeholder">Book Image</div>
+                    <div class="card-body">
+                        <h3>The River Between</h3>
+                        <p>By Ngugi wa Thiong'o</p>
+                        <p class="price">KES 1,200</p>
+                    </div>
+                </div>
+
+                <div class="product-card">
+                    <div class="img-placeholder">Book Image</div>
+                    <div class="card-body">
+                        <h3>A Grain of Wheat</h3>
+                        <p>By Ngugi wa Thiong'o</p>
+                        <p class="price">KES 1,000</p>
+                    </div>
+                </div>
+
+                <div class="product-card">
+                    <div class="img-placeholder">Book Image</div>
+                    <div class="card-body">
+                        <h3>Petals of Blood</h3>
+                        <p>By Ngugi wa Thiong'o</p>
+                        <p class="price">KES 1,400</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Clothes Section -->
+        <section id="clothes" class="section">
+            <h2>Clothes</h2>
+            <div class="product-grid">
+                <div class="product-card">
+                    <div class="img-placeholder">Clothing Image</div>
+                    <div class="card-body">
+                        <h3>Kitenge Wrap</h3>
+                        <p>Traditional African fabric</p>
+                        <p class="price">KES 2,500</p>
+                    </div>
+                </div>
+
+                <div class="product-card">
+                    <div class="img-placeholder">Clothing Image</div>
+                    <div class="card-body">
+                        <h3>Kanga Dress</h3>
+                        <p>Colorful traditional dress</p>
+                        <p class="price">KES 3,000</p>
+                    </div>
+                </div>
+
+                <div class="product-card">
+                    <div class="img-placeholder">Clothing Image</div>
+                    <div class="card-body">
+                        <h3>Maasai Beaded Jacket</h3>
+                        <p>Handcrafted beaded jacket</p>
+                        <p class="price">KES 4,500</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer id="contact">
+        <p>&copy; 2026 Susan's Company, Nairobi. All rights reserved.</p>
+        <br>
+        <p>
+            Contact us: 
+            <a href="mailto:info@susanscompany.co.ke">info@susanscompany.co.ke</a> 
+            | Call: +254 700 123 456
+        </p>
+    </footer>
+
+    <script>
+        document.getElementById('shopNowBtn').addEventListener('click', function() {
+            document.getElementById('books').scrollIntoView({ behavior: 'smooth' });
+        });
+
+        const menuToggle = document.getElementById('menuToggle');
+        const navbar = document.getElementById('navbar');
+
+        menuToggle.addEventListener('click', function() {
+            navbar.classList.toggle('active');
+        });
+    </script>
+
+</body>
+</html>
