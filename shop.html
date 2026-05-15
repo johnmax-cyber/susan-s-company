@@ -283,7 +283,7 @@
         <ul class="nav-links">
             <li><a href="index.html">Home</a></li>
             <li><a href="shop.html" class="active">Shop</a></li>
-            <li><a href="index.html#contact">Contact</a></li>
+            <li><a href="contact.html">Contact</a></li>
         </ul>
         <button class="menu-toggle" id="menuToggle">☰</button>
     </nav>
@@ -311,7 +311,7 @@
         // Initialize Supabase
         const supabaseUrl = 'https://kyknrxolzctljahlegsc.supabase.co';
         const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imt5a25yeG9semN0bGphaGxlZ3NjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg4NjIzNjcsImV4cCI6MjA5NDQzODM2N30.KoJM7dKRtTwOiWIT5VmVpeNqSGJOIts2qQhWsAYoWJM';
-        const supabase = supabase.createClient(supabaseUrl, supabaseAnonKey);
+        const supabaseClient = window.supabase.createClient(supabaseUrl, supabaseAnonKey);
 
         // DOM elements
         const loadingMessage = document.getElementById('loading-message');
@@ -330,7 +330,7 @@
                 booksProductsContainer.innerHTML = '';
 
                 // Fetch all products
-                const { data, error } = await supabase
+                const { data, error } = await supabaseClient
                     .from('products')
                     .select('*');
 
