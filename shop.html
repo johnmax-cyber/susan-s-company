@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Susan's Company - Shop</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #fafaf8;
+            color: #333;
+            line-height: 1.6;
+            font-weight: 400;
+        }
+
+        h1, h2, h3 {
+            font-family: 'Playfair Display', serif;
+            font-weight: 600;
+        }
+
+        :root {
+            --primary-dark: #1a4a2e;
+            --primary-gold: #c9a84c;
+            --background: #fafaf8;
+            --text: #333;
+            --text-light: #666;
+        }
+
+        nav {
+            position: sticky;
+            top: 0;
+            background: var(--primary-dark);
+            color: var(--primary-gold);
+            padding: 20px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .logo {
+            color: var(--primary-gold);
+            font-size: 24px;
+            font-weight: 700;
+            font-family: 'Playfair Display', serif;
+        }
+
+        .logo-container {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .tagline {
+            font-size: 12px;
+            color: var(--primary-gold);
+            font-family: 'Inter', sans-serif;
+            font-weight: 400;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 40px;
+        }
+
+        .nav-links a {
+            color: var(--primary-gold);
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: white;
+        }
+
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--primary-gold);
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        section {
+            padding: 80px 5%;
+        }
+
+        .page-heading {
+            text-align: center;
+            color: var(--primary-dark);
+            font-size: 42px;
+            margin-bottom: 60px;
+            font-family: 'Playfair Display', serif;
+        }
+
+        .section-heading {
+            text-align: center;
+            color: var(--primary-dark);
+            font-size: 32px;
+            margin-bottom: 40px;
+            font-family: 'Playfair Display', serif;
+        }
+
+        .products {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+
+        .product-card {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+            transition: transform 0.4s, box-shadow 0.4s;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .product-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.12);
+        }
+
+        .product-img {
+            height: 200px;
+            background: linear-gradient(135deg, var(--primary-dark) 0%, #2a4a6f 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 20px;
+            font-weight: 600;
+            font-family: 'Playfair Display', serif;
+            text-align: center;
+        }
+
+        .product-info {
+            padding: 25px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .product-info h3 {
+            color: var(--primary-dark);
+            margin-bottom: 12px;
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .product-info p {
+            color: var(--text-light);
+            font-size: 14px;
+            margin-bottom: 20px;
+            line-height: 1.6;
+            flex-grow: 1;
+        }
+
+        .price {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--primary-gold);
+            margin: 15px 0;
+        }
+
+        .order-btn {
+            background: var(--primary-dark);
+            color: var(--primary-gold);
+            border: 2px solid var(--primary-gold);
+            color: var(--primary-gold);
+            border: none;
+            padding: 12px 20px;
+            cursor: pointer;
+            width: 100%;
+            font-weight: 500;
+            border-radius: 50px;
+            transition: transform 0.3s, box-shadow 0.3s, background-color 0.3s;
+            font-size: 16px;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: auto;
+        }
+
+        .order-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(26, 74, 46, 0.25);
+            background-color: var(--primary-dark);
+        }
+
+        .out-of-stock {
+            background: #ccc;
+            color: #666;
+            border: none;
+            padding: 12px 20px;
+            width: 100%;
+            font-weight: 500;
+            border-radius: 50px;
+            font-size: 16px;
+            cursor: not-allowed;
+            margin-top: auto;
+        }
+
+        .loading, .error {
+            text-align: center;
+            padding: 40px;
+            color: var(--primary-dark);
+            font-size: 18px;
+            grid-column: 1 / -1;
+        }
+
+        .error {
+            color: #d32f2f;
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                flex-direction: column;
+                background: var(--primary-dark);
+                border-top: 1px solid rgba(255, 255, 255, 0.1);
+                padding: 0;
+            }
+
+            .nav-links.active {
+                display: flex;
+            }
+
+            .nav-links li {
+                width: 100%;
+            }
+
+            .nav-links a {
+                display: block;
+                padding: 15px 20px;
+                color: var(--primary-gold);
+                text-decoration: none;
+                font-size: 16px;
+                font-weight: 500;
+                transition: color 0.3s;
+            }
+
+            .nav-links a:hover {
+                color: white;
+            }
+
+            .menu-toggle {
+                display: block;
+            }
+
+            .page-heading {
+                font-size: 32px;
+            }
+
+            .section-heading {
+                font-size: 28px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="logo-container">
+            <div class="logo">Susan's Company</div>
+            <div class="tagline">Modest Fashion & Books — Nairobi</div>
+        </div>
+        <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="shop.html" class="active">Shop</a></li>
+            <li><a href="index.html#contact">Contact</a></li>
+        </ul>
+        <button class="menu-toggle" id="menuToggle">☰</button>
+    </nav>
+
+    <section>
+        <h1 class="page-heading">Our Products</h1>
+        
+        <div id="loading-message" class="loading">Loading products...</div>
+        <div id="error-message" class="error" style="display: none;"></div>
+
+        <section id="clothing-section">
+            <h2 class="section-heading">Our Clothing Collection</h2>
+            <div id="clothing-products" class="products"></div>
+        </section>
+
+        <section id="books-section">
+            <h2 class="section-heading">Our Book Collection</h2>
+            <div id="books-products" class="products"></div>
+        </section>
+    </section>
+
+    <!-- Load Supabase CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        // Initialize Supabase
+        const supabaseUrl = 'https://kyknrxolzctljahlegsc.supabase.co';
+        const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imt5a25yeG9semN0bGphaGxlZ3NjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg4NjIzNjcsImV4cCI6MjA5NDQzODM2N30.KoJM7dKRtTwOiWIT5VmVpeNqSGJOIts2qQhWsAYoWJM';
+        const supabase = supabase.createClient(supabaseUrl, supabaseAnonKey);
+
+        // DOM elements
+        const loadingMessage = document.getElementById('loading-message');
+        const errorMessage = document.getElementById('error-message');
+        const clothingProductsContainer = document.getElementById('clothing-products');
+        const booksProductsContainer = document.getElementById('books-products');
+
+        // Fetch products from Supabase
+        async function fetchProducts() {
+            try {
+                loadingMessage.style.display = 'block';
+                errorMessage.style.display = 'none';
+                
+                // Clear containers
+                clothingProductsContainer.innerHTML = '';
+                booksProductsContainer.innerHTML = '';
+
+                // Fetch all products
+                const { data, error } = await supabase
+                    .from('products')
+                    .select('*');
+
+                if (error) throw error;
+
+                if (!data || data.length === 0) {
+                    showError('No products found');
+                    return;
+                }
+
+                // Separate products by category
+                const clothingItems = data.filter(product => product.category === 'clothing');
+                const booksItems = data.filter(product => product.category === 'books');
+
+                // Display clothing products
+                if (clothingItems.length > 0) {
+                    clothingItems.forEach(product => {
+                        const productCard = createProductCard(product);
+                        clothingProductsContainer.appendChild(productCard);
+                    });
+                } else {
+                    clothingProductsContainer.innerHTML = '<p class="error">No clothing products available</p>';
+                }
+
+                // Display books products
+                if (booksItems.length > 0) {
+                    booksItems.forEach(product => {
+                        const productCard = createProductCard(product);
+                        booksProductsContainer.appendChild(productCard);
+                    });
+                } else {
+                    booksProductsContainer.innerHTML = '<p class="error">No book products available</p>';
+                }
+
+            } catch (err) {
+                showError('Failed to load products. Please check your connection and try again.');
+                console.error('Error fetching products:', err);
+            } finally {
+                loadingMessage.style.display = 'none';
+            }
+        }
+
+        // Create product card element
+        function createProductCard(product) {
+            const card = document.createElement('div');
+            card.className = 'product-card';
+
+            const imgDiv = document.createElement('div');
+            imgDiv.className = 'product-img';
+            imgDiv.textContent = product.name.substring(0, 15) + (product.name.length > 15 ? '...' : '');
+            card.appendChild(imgDiv);
+
+            const infoDiv = document.createElement('div');
+            infoDiv.className = 'product-info';
+
+            const nameH3 = document.createElement('h3');
+            nameH3.textContent = product.name;
+            infoDiv.appendChild(nameH3);
+
+            const descP = document.createElement('p');
+            descP.textContent = product.description || 'No description available';
+            infoDiv.appendChild(descP);
+
+            const priceDiv = document.createElement('div');
+            priceDiv.className = 'price';
+            priceDiv.textContent = `KSh ${product.price ? product.price.toLocaleString() : '0'}`;
+            infoDiv.appendChild(priceDiv);
+
+            // Add order button or out of stock message
+            if (product.in_stock !== false) {
+                const orderBtn = document.createElement('a');
+                orderBtn.href = product.whatsapp_message || '#';
+                orderBtn.className = 'order-btn';
+                orderBtn.textContent = 'Order Now';
+                infoDiv.appendChild(orderBtn);
+            } else {
+                const outOfStock = document.createElement('div');
+                outOfStock.className = 'out-of-stock';
+                outOfStock.textContent = 'Out of Stock';
+                infoDiv.appendChild(outOfStock);
+            }
+
+            card.appendChild(infoDiv);
+            return card;
+        }
+
+        // Show error message
+        function showError(message) {
+            errorMessage.textContent = message;
+            errorMessage.style.display = 'block';
+        }
+
+        // Mobile menu toggle
+        document.getElementById('menuToggle').addEventListener('click', function() {
+            const navLinks = document.querySelector('.nav-links');
+            navLinks.classList.toggle('active');
+        });
+
+        // Close mobile menu when clicking a link
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', function() {
+                const navLinks = document.querySelector('.nav-links');
+                navLinks.classList.remove('active');
+            });
+        });
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', fetchProducts);
+    </script>
+</body>
+</html>
