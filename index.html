@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Susan's Company - Nairobi</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         * {
             margin: 0;
@@ -264,6 +265,26 @@
             box-shadow: 0 6px 20px rgba(181, 36, 38, 0.25);
         }
 
+        .view-all-btn {
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            cursor: pointer;
+            font-weight: 500;
+            border-radius: 50px;
+            transition: transform 0.3s, box-shadow 0.3s;
+            font-size: 16px;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 20px;
+        }
+
+        .view-all-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(181, 36, 38, 0.25);
+        }
+
         .clothes {
             background: var(--background);
         }
@@ -459,67 +480,15 @@
     <section class="clothes" id="clothes">
         <h2 class="section-title">Our Clothing Collection</h2>
         <div class="products">
-            <div class="product-card">
-                <div class="product-img">Modest Hijab Dress</div>
-                <div class="product-info">
-                    <h3>Modest Hijab Dress</h3>
-                    <p>Elegant full length dress designed for comfort and modesty.</p>
-                    <div class="price">KSh 2,500</div>
-                    <a href="https://wa.me/254700000000?text=I would like to order: Modest Hijab Dress" class="order-btn">Order Now</a>
-                </div>
-            </div>
-            <div class="product-card">
-                <div class="product-img">Women's Abaya</div>
-                <div class="product-info">
-                    <h3>Women's Abaya</h3>
-                    <p>Premium quality abaya with intricate detailing.</p>
-                    <div class="price">KSh 3,800</div>
-                    <a href="https://wa.me/254700000000?text=I would like to order: Women's Abaya" class="order-btn">Order Now</a>
-                </div>
-            </div>
-            <div class="product-card">
-                <div class="product-img">Modest Blouse Set</div>
-                <div class="product-info">
-                    <h3>Modest Blouse Set</h3>
-                    <p>Blouse and trouser set perfect for any occasion.</p>
-                    <div class="price">KSh 1,800</div>
-                    <a href="https://wa.me/254700000000?text=I would like to order: Modest Blouse Set" class="order-btn">Order Now</a>
-                </div>
-            </div>
         </div>
+        <a href="shop.html" class="view-all-btn">View All Products</a>
     </section>
 
     <section class="books" id="books">
         <h2 class="section-title">Our Book Collection</h2>
         <div class="products">
-            <div class="product-card">
-                <div class="product-img">The Holy Quran</div>
-                <div class="product-info">
-                    <h3>The Holy Quran</h3>
-                    <p>Arabic and English translation for spiritual guidance.</p>
-                    <div class="price">KSh 1,200</div>
-                    <a href="https://wa.me/254700000000?text=I would like to order: The Holy Quran" class="order-btn">Order Now</a>
-                </div>
-            </div>
-            <div class="product-card">
-                <div class="product-img">Islamic Finance Guide</div>
-                <div class="product-info">
-                    <h3>Islamic Finance Guide</h3>
-                    <p>Modern finance principles in accordance with Islamic law.</p>
-                    <div class="price">KSh 850</div>
-                    <a href="https://wa.me/254700000000?text=I would like to order: Islamic Finance Guide" class="order-btn">Order Now</a>
-                </div>
-            </div>
-            <div class="product-card">
-                <div class="product-img">Nairobi Stories</div>
-                <div class="product-info">
-                    <h3>Nairobi Stories</h3>
-                    <p>A collection of stories from local Kenyan authors.</p>
-                    <div class="price">KSh 650</div>
-                    <a href="https://wa.me/254700000000?text=I would like to order: Nairobi Stories" class="order-btn">Order Now</a>
-                </div>
-            </div>
         </div>
+        <a href="shop.html" class="view-all-btn">View All Products</a>
     </section>
 
     <section class="contact" id="contact">
@@ -539,21 +508,95 @@
 
     <a href="https://wa.me/254700000000" class="whatsapp-float">💬</a>
 
-     <script>
-         document.getElementById('menuToggle').addEventListener('click', function() {
-             const navLinks = document.querySelector('.nav-links');
-             navLinks.classList.toggle('active');
-         });
+    <script>
+        document.getElementById('menuToggle').addEventListener('click', function() {
+            const navLinks = document.querySelector('.nav-links');
+            navLinks.classList.toggle('active');
+        });
 
-         document.querySelectorAll('.nav-links a').forEach(link => {
-             link.addEventListener('click', function(e) {
-                 e.preventDefault();
-                 const target = document.querySelector(this.getAttribute('href'));
-                 target.scrollIntoView({ behavior: 'smooth' });
-                 const navLinks = document.querySelector('.nav-links');
-                 navLinks.classList.remove('active');
-             });
-         });
-     </script>
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                target.scrollIntoView({ behavior: 'smooth' });
+                const navLinks = document.querySelector('.nav-links');
+                navLinks.classList.remove('active');
+            });
+        });
+    </script>
+
+    <script>
+        const supabaseUrl = 'https://kyknrxolzctljahlegsc.supabase.co';
+        const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imt5a25yeG9semN0bGphaGxlZ3NjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg4NjIzNjcsImV4cCI6MjA5NDQzODM2N30.KoJM7dKRtTwOiWIT5VmVpeNqSGJOIts2qQhWsAYoWJM';
+        const supabaseClient = window.supabase.createClient(supabaseUrl, supabaseAnonKey);
+
+        async function fetchProductsByCategory(category, limit) {
+            const { data, error } = await supabaseClient
+                .from('products')
+                .select('*')
+                .eq('category', category)
+                .order('created_at', { ascending: false })
+                .limit(limit);
+
+            if (error) {
+                console.error('Error fetching products:', error);
+                return [];
+            }
+            return data;
+        }
+
+        async function updateSection(sectionClass, category) {
+            const productsContainer = document.querySelector(`.${sectionClass} .products`);
+            if (!productsContainer) return;
+
+            // Clear current content
+            productsContainer.innerHTML = '';
+
+            const products = await fetchProductsByCategory(category, 3);
+
+            if (products.length === 0) {
+                productsContainer.innerHTML = '<p class="error">No products available</p>';
+                return;
+            }
+
+            products.forEach(product => {
+                const card = document.createElement('div');
+                card.className = 'product-card';
+
+                const imgDiv = document.createElement('div');
+                imgDiv.className = 'product-img';
+                // We don't have an image URL, so we'll show the first letter of the product name or a placeholder.
+                // Since the original hardcoded cards used the product name (truncated) in the image div, we'll do the same.
+                imgDiv.textContent = product.name.substring(0, 15) + (product.name.length > 15 ? '...' : '');
+                card.appendChild(imgDiv);
+
+                const infoDiv = document.createElement('div');
+                infoDiv.className = 'product-info';
+
+                const nameH3 = document.createElement('h3');
+                nameH3.textContent = product.name;
+                infoDiv.appendChild(nameH3);
+
+                const priceDiv = document.createElement('div');
+                priceDiv.className = 'price';
+                priceDiv.textContent = `KSh ${product.price ? product.price.toLocaleString() : '0'}`;
+                infoDiv.appendChild(priceDiv);
+
+                const orderBtn = document.createElement('a');
+                orderBtn.href = 'shop.html'; // Link to shop.html for full details
+                orderBtn.className = 'order-btn';
+                orderBtn.textContent = 'Order Now';
+                infoDiv.appendChild(orderBtn);
+
+                card.appendChild(infoDiv);
+                productsContainer.appendChild(card);
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            await updateSection('clothes', 'clothes');
+            await updateSection('books', 'books');
+        });
+    </script>
 </body>
 </html>
