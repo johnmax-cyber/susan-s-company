@@ -1,0 +1,51 @@
+graph TD
+    %% HTML Pages
+    A[index.html] --> B[shop.html]
+    A --> C[contact.html]
+    B --> A
+    B --> C
+    C --> A
+    C --> B
+    
+    %% Shared Resources
+    A --> D[Google Fonts]
+    B --> D
+    C --> D
+    
+    %% CSS Styling (embedded in each HTML)
+    A --> E[Custom CSS]
+    B --> E
+    C --> E
+    
+    %% JavaScript Functionality
+    A --> F[Mobile Menu Toggle]
+    B --> F
+    C --> F
+    
+    A --> G[Smooth Scrolling]
+    C --> H[Form Submission]
+    H --> I[Supabase CDN]
+    I --> J[Supabase API]
+    
+    %% WhatsApp Integration
+    A --> K[WhatsApp Float Button]
+    B --> K
+    C --> K
+    K --> L[WhatsApp Web/Ordering]
+    
+    %% External Links
+    B --> M[Product Order Links]
+    M --> L
+    
+    %% Styling
+    classDef html fill:#f9f,stroke:#333,stroke-width:2px;
+    classDef resource fill:#bbf,stroke:#333,stroke-width:1px;
+    classDef js fill:#bfb,stroke:#333,stroke-width:1px;
+    classDef external fill:#fbb,stroke:#333,stroke-width:1px;
+    classDef whatsapp fill:#9f9,stroke:#333,stroke-width:1px;
+    
+    class A,B,C html;
+    class D,E resource;
+    class F,G,H,J js;
+    class I,L external;
+    class K whatsapp;
