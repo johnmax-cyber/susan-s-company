@@ -1,51 +1,84 @@
 graph TD
     %% HTML Pages
-    A[index.html] --> B[shop.html]
-    A --> C[contact.html]
-    B --> A
-    B --> C
-    C --> A
-    C --> B
-    
-    %% Shared Resources
-    A --> D[Google Fonts]
+    A["📄 index.html<br/>(Home)"]
+    B["📄 shop.html<br/>(Products)"]
+    C["📄 contact.html<br/>(Contact Form)"]
+
+    %% Navigation Layer
+    A -->|Navigation Menu| B
+    A -->|Navigation Menu| C
+    B -->|Navigation Menu| A
+    B -->|Navigation Menu| C
+    C -->|Navigation Menu| A
+    C -->|Navigation Menu| B
+
+    A -->|'Shop Now' Button| B
+    A -->|'View All Products' Button| B
+
+    %% External Services
+    D["🔗 Google Fonts<br/>(Typography)"]
+    A --> D
     B --> D
     C --> D
-    
-    %% CSS Styling (embedded in each HTML)
-    A --> E[Custom CSS]
-    B --> E
-    C --> E
-    
-    %% JavaScript Functionality
-    A --> F[Mobile Menu Toggle]
+
+    %% Supabase Integration
+    E["🗄️ Supabase Database"]
+    F["📦 Supabase CDN<br/>(supabase-js@2)"]
+
+    A --> F
     B --> F
     C --> F
-    
-    A --> G[Smooth Scrolling]
-    C --> H[Form Submission]
-    H --> I[Supabase CDN]
-    I --> J[Supabase API]
-    
+    F --> E
+
+    %% Supabase Tables
+    E --> G["📋 products table"]
+    E --> H["💬 messages table"]
+
+    A -->|Fetch Products<br/>category:clothes,books| G
+    B -->|Fetch All Products<br/>category:clothes,books| G
+    C -->|Submit Contact Form| H
+
     %% WhatsApp Integration
-    A --> K[WhatsApp Float Button]
+    I["💬 WhatsApp Web<br/>wa.me/254700000000"]
+    J["📞 WhatsApp Float Button<br/>(Fixed on all pages)"]
+
+    A --> J
+    B --> J
+    C --> J
+    J --> I
+
+    B -->|Product Order Links| I
+    C -->|WhatsApp CTA Button| I
+
+    %% JavaScript Functionality
+    K["⚙️ Mobile Menu Toggle<br/>(Active on all pages)"]
+    L["🔄 Smooth Scrolling<br/>(index.html internal anchors)"]
+    M["📝 Form Submission Handler<br/>(contact.html only)"]
+
+    A --> K
     B --> K
     C --> K
-    K --> L[WhatsApp Web/Ordering]
-    
-    %% External Links
-    B --> M[Product Order Links]
-    M --> L
-    
-    %% Styling
-    classDef html fill:#f9f,stroke:#333,stroke-width:2px;
-    classDef resource fill:#bbf,stroke:#333,stroke-width:1px;
-    classDef js fill:#bfb,stroke:#333,stroke-width:1px;
-    classDef external fill:#fbb,stroke:#333,stroke-width:1px;
-    classDef whatsapp fill:#9f9,stroke:#333,stroke-width:1px;
-    
-    class A,B,C html;
-    class D,E resource;
-    class F,G,H,J js;
-    class I,L external;
-    class K whatsapp;
+
+    A --> L
+    A -->|Orders via WhatsApp| I
+    B -->|Orders via WhatsApp| I
+    C --> M
+
+    %% Styling Classes
+    N["🎨 Consistent Color Scheme<br/>Green: #1a4a2e<br/>Gold: #c9a84c"]
+    A -.->|Uses| N
+    B -.->|Uses| N
+    C -.->|Uses| N
+
+    %% Define styles
+    classDef htmlPage fill:#4CAF50,stroke:#2d5016,stroke-width:3px,color:#fff;
+    classDef external fill:#2196F3,stroke:#0d47a1,stroke-width:2px,color:#fff;
+    classDef database fill:#FF9800,stroke:#e65100,stroke-width:2px,color:#fff;
+    classDef function fill:#9C27B0,stroke:#4a148c,stroke-width:2px,color:#fff;
+    classDef style fill:#795548,stroke:#3e2723,stroke-width:2px,color:#fff;
+
+    class A,B,C htmlPage;
+    class D,F,I,J external;
+    class E,G,H database;
+    class K,L,M function;
+    class N style;

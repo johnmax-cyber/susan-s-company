@@ -176,6 +176,19 @@
             margin: 15px 0;
         }
 
+        .original-price {
+            text-decoration: line-through;
+            color: var(--text-light);
+            font-size: 16px;
+            margin-bottom: 5px;
+        }
+
+        .discount-price {
+            font-size: 18px;
+            font-weight: 600;
+            color: #d32f2f;
+        }
+
         .order-btn {
             background: var(--primary-dark);
             color: var(--primary-gold);
@@ -394,15 +407,31 @@
 
             const priceDiv = document.createElement('div');
             priceDiv.className = 'price';
-            priceDiv.textContent = `KSh ${product.price ? product.price.toLocaleString() : '0'}`;
+
+            if (product.discount_price && product.discount_price > 0) {
+                const originalPrice = document.createElement('div');
+                originalPrice.className = 'original-price';
+                originalPrice.textContent = `KSh ${product.price ? product.price.toLocaleString() : '0'}`;
+                priceDiv.appendChild(originalPrice);
+
+                const discountPrice = document.createElement('div');
+                discountPrice.className = 'discount-price';
+                discountPrice.textContent = `KSh ${product.discount_price.toLocaleString()}`;
+                priceDiv.appendChild(discountPrice);
+            } else {
+                priceDiv.textContent = `KSh ${product.price ? product.price.toLocaleString() : '0'}`;
+            }
             infoDiv.appendChild(priceDiv);
 
             // Add order button or out of stock message
             if (product.in_stock !== false) {
-                const orderBtn = document.createElement('a');
-                orderBtn.href = product.whatsapp_message || '#';
+                const orderBtn = document.createElement('button');
                 orderBtn.className = 'order-btn';
                 orderBtn.textContent = 'Order Now';
+                orderBtn.addEventListener('click', function() {
+                    const url = `https://wa.me/254700000000?text=${encodeURIComponent(product.whatsapp_message)}`;
+                    window.open(url, '_blank');
+                });
                 infoDiv.appendChild(orderBtn);
             } else {
                 const outOfStock = document.createElement('div');
