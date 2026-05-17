@@ -433,8 +433,7 @@
                 orderBtn.className = 'order-btn';
                 orderBtn.textContent = 'Order Now';
                 orderBtn.addEventListener('click', function() {
-                    const url = `https://wa.me/254700000000?text=${encodeURIComponent(product.whatsapp_message)}`;
-                    window.open(url, '_blank');
+                    window.open(`https://wa.me/254700000000?text=${encodeURIComponent(product.whatsapp_message || 'I would like to place an order')}`, '_blank');
                 });
                 infoDiv.appendChild(orderBtn);
             } else {
