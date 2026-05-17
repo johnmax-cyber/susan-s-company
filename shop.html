@@ -319,12 +319,16 @@
     <!-- Load Supabase CDN -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
-        // Initialize Supabase
+        // Supabase public anon credentials — safe to expose in frontend
         const supabaseUrl = 'https://kyknrxolzctljahlegsc.supabase.co';
         const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imt5a25yeG9semN0bGphaGxlZ3NjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg4NjIzNjcsImV4cCI6MjA5NDQzODM2N30.KoJM7dKRtTwOiWIT5VmVpeNqSGJOIts2qQhWsAYoWJM';
-        const supabaseClient = window.supabase.createClient(supabaseUrl, supabaseAnonKey);
 
-        // DOM elements
+        if (!supabaseUrl || !supabaseAnonKey) {
+            console.error('Missing Supabase configuration');
+        } else {
+            const supabaseClient = window.supabase.createClient(supabaseUrl, supabaseAnonKey);
+
+            // DOM elements
         const loadingMessage = document.getElementById('loading-message');
         const errorMessage = document.getElementById('error-message');
         const clothingProductsContainer = document.getElementById('clothing-products');
@@ -466,6 +470,7 @@
 
         // Initialize
         document.addEventListener('DOMContentLoaded', fetchProducts);
-    </script>
+    }
+</script>
 </body>
 </html>

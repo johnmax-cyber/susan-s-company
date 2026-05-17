@@ -522,7 +522,9 @@
                     const target = document.querySelector(href);
                     if (target) {
                         target.scrollIntoView({ behavior: 'smooth' });
-                    }
+            }
+
+        }
                 }
                 const navLinks = document.querySelector('.nav-links');
                 navLinks.classList.remove('active');
@@ -531,77 +533,84 @@
     </script>
 
     <script>
+        // Supabase public anon credentials — safe to expose in frontend
         const supabaseUrl = 'https://kyknrxolzctljahlegsc.supabase.co';
         const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imt5a25yeG9semN0bGphaGxlZ3NjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg4NjIzNjcsImV4cCI6MjA5NDQzODM2N30.KoJM7dKRtTwOiWIT5VmVpeNqSGJOIts2qQhWsAYoWJM';
-        const supabaseClient = window.supabase.createClient(supabaseUrl, supabaseAnonKey);
 
-        async function fetchProductsByCategory(category, limit) {
-            const { data, error } = await supabaseClient
-                .from('products')
-                .select('*')
-                .eq('category', category)
-                .order('created_at', { ascending: false })
-                .limit(limit);
+        if (!supabaseUrl || !supabaseAnonKey) {
+            console.error('Missing Supabase configuration');
+        } else {
+            const supabaseClient = window.supabase.createClient(supabaseUrl, supabaseAnonKey);
 
-            if (error) {
-                console.error('Error fetching products:', error);
-                return [];
-            }
-            return data;
-        }
+            async function fetchProductsByCategory(category, limit) {
+                const { data, error } = await supabaseClient
+                    .from('products')
+                    .select('*')
+                    .eq('category', category)
+                    .order('created_at', { ascending: false })
+                    .limit(limit);
 
-        async function updateSection(sectionClass, category) {
-            const productsContainer = document.querySelector(`.${sectionClass} .products`);
-            if (!productsContainer) return;
-
-            // Clear current content
-            productsContainer.innerHTML = '';
-
-            const products = await fetchProductsByCategory(category, 3);
-
-            if (products.length === 0) {
-                productsContainer.innerHTML = '<p class="error">No products available</p>';
-                return;
+                if (error) {
+                    console.error('Error fetching products:', error);
+                    return [];
+                }
+                return data;
             }
 
-            products.forEach(product => {
-                const card = document.createElement('div');
-                card.className = 'product-card';
+            async function updateSection(sectionClass, category) {
+                const productsContainer = document.querySelector(`.${sectionClass} .products`);
+                if (!productsContainer) return;
 
-                const imgDiv = document.createElement('div');
-                imgDiv.className = 'product-img';
-                // We don't have an image URL, so we'll show the first letter of the product name or a placeholder.
-                // Since the original hardcoded cards used the product name (truncated) in the image div, we'll do the same.
-                imgDiv.textContent = product.name.substring(0, 15) + (product.name.length > 15 ? '...' : '');
-                card.appendChild(imgDiv);
+                // Clear current content
+                productsContainer.innerHTML = '';
 
-                const infoDiv = document.createElement('div');
-                infoDiv.className = 'product-info';
+                const products = await fetchProductsByCategory(category, 3);
 
-                const nameH3 = document.createElement('h3');
-                nameH3.textContent = product.name;
-                infoDiv.appendChild(nameH3);
+                if (products.length === 0) {
+                    productsContainer.innerHTML = '<p class="error">No products available</p>';
+                    return;
+                }
 
-                const priceDiv = document.createElement('div');
-                priceDiv.className = 'price';
-                priceDiv.textContent = `KSh ${product.price ? product.price.toLocaleString() : '0'}`;
-                infoDiv.appendChild(priceDiv);
+                products.forEach(product => {
+                    const card = document.createElement('div');
+                    card.className = 'product-card';
 
-                const orderBtn = document.createElement('a');
-                orderBtn.href = 'shop.html'; // Link to shop.html for full details
-                orderBtn.className = 'order-btn';
-                orderBtn.textContent = 'Order Now';
-                infoDiv.appendChild(orderBtn);
+                    const imgDiv = document.createElement('div');
+                    imgDiv.className = 'product-img';
+                    // We don't have an image URL, so we'll show the first letter of the product name or a placeholder.
+                    // Since the original hardcoded cards used the product name (truncated) in the image div, we'll do the same.
+                    imgDiv.textContent = product.name.substring(0, 15) + (product.name.length > 15 ? '...' : '');
+                    card.appendChild(imgDiv);
 
-                card.appendChild(infoDiv);
-                productsContainer.appendChild(card);
+                    const infoDiv = document.createElement('div');
+                    infoDiv.className = 'product-info';
+
+                    const nameH3 = document.createElement('h3');
+                    nameH3.textContent = product.name;
+                    infoDiv.appendChild(nameH3);
+
+                    const priceDiv = document.createElement('div');
+                    priceDiv.className = 'price';
+                    priceDiv.textContent = `KSh ${product.price ? product.price.toLocaleString() : '0'}`;
+                    infoDiv.appendChild(priceDiv);
+
+                    const orderBtn = document.createElement('a');
+                    orderBtn.href = 'shop.html'; // Link to shop.html for full details
+                    orderBtn.className = 'order-btn';
+                    orderBtn.textContent = 'Order Now';
+                    infoDiv.appendChild(orderBtn);
+
+                    card.appendChild(infoDiv);
+                    productsContainer.appendChild(card);
+                });
+            }
+
+            document.addEventListener('DOMContentLoaded', async () => {
+                await updateSection('clothes', 'clothes');
+                await updateSection('books', 'books');
             });
         }
-
-        document.addEventListener('DOMContentLoaded', async () => {
-            await updateSection('clothes', 'clothes');
-            await updateSection('books', 'books');
-        });
     </script>
+
 </body>
 </html>

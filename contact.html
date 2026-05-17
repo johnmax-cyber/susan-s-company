@@ -183,6 +183,13 @@
             background-color: var(--primary-dark);
         }
 
+        .field-error {
+            color: #721c24;
+            font-size: 13px;
+            margin-top: 5px;
+            display: none;
+        }
+
         .success-message,
         .error-message {
             text-align: center;
@@ -318,11 +325,13 @@
                 <div class="form-group">
                     <label for="name">Customer Name *</label>
                     <input type="text" id="name" name="name" required>
+                    <span class="field-error" id="name-error"></span>
                 </div>
                 
                 <div class="form-group">
                     <label for="phone">Phone Number *</label>
                     <input type="tel" id="phone" name="phone" required>
+                    <span class="field-error" id="phone-error"></span>
                 </div>
                 
                 <div class="form-group">
@@ -343,6 +352,7 @@
                 <div class="form-group">
                     <label for="message">Message *</label>
                     <textarea id="message" name="message" required></textarea>
+                    <span class="field-error" id="message-error"></span>
                 </div>
                 
                 <button type="submit" class="submit-btn">Send Message</button>
@@ -361,39 +371,99 @@
     <!-- Load Supabase CDN -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
-        // Initialize Supabase
+        // Supabase public anon credentials — safe to expose in frontend
         const supabaseUrl = 'https://kyknrxolzctljahlegsc.supabase.co';
         const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imt5a25yeG9semN0bGphaGxlZ3NjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg4NjIzNjcsImV4cCI6MjA5NDQzODM2N30.KoJM7dKRtTwOiWIT5VmVpeNqSGJOIts2qQhWsAYoWJM';
+
+        if (!supabaseUrl || !supabaseAnonKey) {
+            console.error('Missing Supabase configuration');
+            return;
+        }
+
         const supabaseClient = window.supabase.createClient(supabaseUrl, supabaseAnonKey);
 
         // DOM elements
         const form = document.getElementById('contactForm');
-        const successMessage = document.getElementById('success-message');
-        const errorMessage = document.getElementById('error-message');
+        const nameInput       = document.getElementById('name');
+        const phoneInput      = document.getElementById('phone');
+        const messageInput    = document.getElementById('message');
+        const nameError       = document.getElementById('name-error');
+        const phoneError      = document.getElementById('phone-error');
+        const messageError    = document.getElementById('message-error');
+        const successMessage  = document.getElementById('success-message');
+        const errorMessage    = document.getElementById('error-message');
+
+        // Field-level error helpers
+        function showFieldError(element, message) {
+            element.textContent = message;
+            element.style.display = 'block';
+        }
+        function clearFieldErrors() {
+            [nameError, phoneError, messageError].forEach(el => {
+                el.textContent = '';
+                el.style.display = 'none';
+            });
+        }
+
+        // Validation helpers
+        function validateName(name) {
+            return name.trim().length >= 2;
+        }
+        function validatePhone(phone) {
+            return /^0(7|1)\d{8}$/.test(phone.trim());
+        }
+        function validateMessage(message) {
+            return message.trim().length >= 10;
+        }
 
         // Handle form submission
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
-            
+
             // Clear previous messages
             successMessage.style.display = 'none';
             errorMessage.style.display = 'none';
             errorMessage.textContent = '';
+            clearFieldErrors();
 
-            // Get form data
-            const formData = new FormData(form);
-            const data = Object.fromEntries(formData);
+            // Read raw values
+            const rawName     = nameInput.value;
+            const rawPhone    = phoneInput.value;
+            const rawMessage  = messageInput.value;
+
+            let isValid = true;
+
+            // 1. Name: at least 2 characters
+            if (!validateName(rawName)) {
+                showFieldError(nameError, 'Name must be at least 2 characters.');
+                isValid = false;
+            }
+
+            // 2. Phone: 10 digits, starts with 07 or 01
+            if (!validatePhone(rawPhone)) {
+                showFieldError(phoneError, 'Phone must be 10 digits starting with 07 or 01 (e.g. 0712345678).');
+                isValid = false;
+            }
+
+            // 3. Message: at least 10 characters
+            if (!validateMessage(rawMessage)) {
+                showFieldError(messageError, 'Message must be at least 10 characters.');
+                isValid = false;
+            }
+
+            // Only submit if all validations pass
+            if (!isValid) return;
 
             try {
-                // Insert into Supabase messages table
+                // Sanitize sanitize all inputs strip HTML tags/quotes before insertion
                 const { error } = await supabaseClient
                     .from('messages')
                     .insert([
                         {
-                            name: data.name,
-                            phone: data.phone,
-                            product_interest: data.interest,
-                            message: data.message,
+                            name: sanitize(rawName),
+                            phone: sanitize(rawPhone),
+                            product_interest: sanitize(form.elements.interest.value),
+                            message: sanitize(rawMessage),
                             created_at: new Date().toISOString()
                         }
                     ]);
@@ -402,7 +472,10 @@
 
                 // Show success message
                 successMessage.style.display = 'block';
-                
+
+                // Clear field errors on successful submit
+                clearFieldErrors();
+
                 // Reset form
                 form.reset();
             } catch (err) {
