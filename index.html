@@ -15,7 +15,7 @@
 
         body {
             font-family: 'Inter', sans-serif;
-            background: #fafaf8;
+            background: #f5f5f5;
             color: #333;
             line-height: 1.6;
             font-weight: 400;
@@ -29,7 +29,7 @@
         :root {
             --primary-dark: #1a4a2e;
             --primary-gold: #c9a84c;
-            --background: #fafaf8;
+            --background: #f5f5f5;
             --text: #333;
             --text-light: #666;
             --primary: #1a4a2e;
@@ -83,14 +83,14 @@
         }
 
         .nav-links a:hover {
-            color: white;
+            color: var(--accent);
         }
 
         .menu-toggle {
             display: none;
             background: none;
             border: none;
-            color: var(--primary);
+            color: var(--accent);
             font-size: 24px;
             cursor: pointer;
         }
@@ -139,7 +139,7 @@
         }
 
         .about {
-            background: var(--background);
+            background: #ffffff;
             text-align: center;
             max-width: 800px;
             margin: 0 auto;
@@ -246,8 +246,8 @@
         }
 
         .order-btn {
-            background: var(--primary-dark);
-            color: var(--primary-gold);
+            background: var(--primary-gold);
+            color: var(--primary-dark);
             border: 2px solid var(--primary-gold);
             padding: 12px 30px;
             cursor: pointer;
@@ -262,12 +262,12 @@
 
         .order-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(26, 74, 46, 0.25);
+            box-shadow: 0 6px 20px rgba(201, 168, 76, 0.3);
         }
 
         .view-all-btn {
-            background: var(--primary-dark);
-            color: var(--primary-gold);
+            background: var(--primary-gold);
+            color: var(--primary-dark);
             border: 2px solid var(--primary-gold);
             padding: 12px 30px;
             cursor: pointer;
@@ -282,15 +282,15 @@
 
         .view-all-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(26, 74, 46, 0.25);
+            box-shadow: 0 6px 20px rgba(201, 168, 76, 0.3);
         }
 
         .clothes {
-            background: var(--background);
+            background: #f5f5f5;
         }
 
         .books {
-            background: white;
+            background: #f5f5f5;
         }
 
         .section-title {
@@ -301,15 +301,15 @@
         }
 
         .contact {
-            background: var(--primary-dark);
-            color: white;
+            background: #ffffff;
+            color: var(--primary-dark);
             text-align: center;
         }
 
         .contact h2 {
             font-size: 42px;
             margin-bottom: 40px;
-            color: white;
+            color: var(--primary-dark);
         }
 
         .contact-info {
@@ -319,7 +319,7 @@
         .contact-info p {
             margin: 15px 0;
             font-size: 18px;
-            color: rgba(255, 255, 255, 0.9);
+            color: var(--text-light);
         }
 
         .whatsapp-btn {
@@ -403,19 +403,19 @@
                  width: 100%;
              }
 
-             .nav-links a {
-                 display: block;
-                 padding: 15px 20px;
-                 color: var(--primary);
-                 text-decoration: none;
-                 font-size: 16px;
-                 font-weight: 500;
-                 transition: color 0.3s;
-             }
+              .nav-links a {
+                  display: block;
+                  padding: 15px 20px;
+                  color: var(--primary-dark);
+                  text-decoration: none;
+                  font-size: 16px;
+                  font-weight: 500;
+                  transition: color 0.3s;
+              }
 
-             .nav-links a:hover {
-                 color: var(--accent);
-             }
+              .nav-links a:hover {
+                  color: var(--accent);
+              }
 
              .menu-toggle {
                  display: block;
@@ -548,7 +548,7 @@
                     .select('*')
                     .eq('category', category)
                     .order('created_at', { ascending: false })
-                    .limit(limit);
+                    .limit(6);
 
                 if (error) {
                     console.error('Error fetching products:', error);
