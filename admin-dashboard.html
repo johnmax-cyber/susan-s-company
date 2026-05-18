@@ -112,6 +112,7 @@
       <div class="nav-item" onclick="location.href='admin-dashboard.html'">Dashboard</div>
       <div class="nav-item" onclick="location.href='admin-products.html'">Products</div>
       <div class="nav-item" onclick="location.href='admin-messages.html'">Messages</div>
+      <div class="nav-item" onclick="location.href='admin-orders.html'">Orders</div>
       <div class="nav-item logout" onclick="logout()">Logout</div>
     </div>
     <div class="main-content">
@@ -133,14 +134,37 @@
           <div class="stat-number" id="outOfStock">—</div>
           <div class="stat-label">Out of Stock</div>
         </div>
+        <div class="stat-card">
+          <div class="stat-number" id="totalOrders">—</div>
+          <div class="stat-label">Total Orders</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number" id="pendingOrders">—</div>
+          <div class="stat-label">Pending Orders</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number" id="deliveredOrders">—</div>
+          <div class="stat-label">Delivered Orders</div>
+        </div>
       </div>
       <div class="actions">
         <a href="admin-products.html" class="action-btn btn-primary">Quick Add Product</a>
         <a href="admin-messages.html" class="action-btn btn-secondary">View Messages</a>
+        <a href="admin-orders.html" class="action-btn btn-secondary">View All Orders</a>
+      </div>
+      
+      <!-- Recent Orders Section -->
+      <div class="recent-orders">
+        <h2 class="section-heading">Recent Orders</h2>
+        <div id="recent-orders-list">
+          <!-- Recent orders will be inserted here -->
+        </div>
       </div>
     </div>
   </div>
-  <script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', async function() {
     const supabaseClient = window.supabase.createClient(
       'https://kyknrxolzctljahlegsc.supabase.co',
       'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imt5a25yeG9semN0bGphaGxlZ3NjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg4NjIzNjcsImV4cCI6MjA5NDQzODM2N30.KoJM7dKRtTwOiWIT5VmVpeNqSGJOIts2qQhWsAYoWJM'
@@ -155,22 +179,79 @@
       fetchStats();
     }
     async function fetchStats() {
-      const [{ count: totalProducts }, { count: unreadMessages }, { count: inStock }, { count: outOfStock }] = await Promise.all([
+      const [{ count: totalProducts }, { count: unreadMessages }, { count: inStock }, { count: outOfStock }, 
+             { count: totalOrders }, { count: pendingOrders }, { count: deliveredOrders }] = await Promise.all([
         supabaseClient.from('products').select('*', { count: 'exact', head: true }),
         supabaseClient.from('messages').select('*', { count: 'exact', head: true }).eq('is_read', false),
         supabaseClient.from('products').select('*', { count: 'exact', head: true }).eq('in_stock', true),
-        supabaseClient.from('products').select('*', { count: 'exact', head: true }).eq('in_stock', false)
+        supabaseClient.from('products').select('*', { count: 'exact', head: true }).eq('in_stock', false),
+        supabaseClient.from('orders').select('*', { count: 'exact', head: true }),
+        supabaseClient.from('orders').select('*', { count: 'exact', head: true }).eq('status', 'pending'),
+        supabaseClient.from('orders').select('*', { count: 'exact', head: true }).eq('status', 'delivered')
       ]);
       document.getElementById('totalProducts').textContent = totalProducts || 0;
       document.getElementById('unreadMessages').textContent = unreadMessages || 0;
       document.getElementById('inStock').textContent = inStock || 0;
       document.getElementById('outOfStock').textContent = outOfStock || 0;
+      document.getElementById('totalOrders').textContent = totalOrders || 0;
+      document.getElementById('pendingOrders').textContent = pendingOrders || 0;
+      document.getElementById('deliveredOrders').textContent = deliveredOrders || 0;
+      
+      // Fetch recent orders
+      fetchRecentOrders();
     }
+    async function fetchRecentOrders() {
+      try {
+        const { data, error } = await supabaseClient
+          .from('orders')
+          .select('*')
+          .order('created_at', { ascending: false })
+          .limit(5);
+        
+        if (error) throw error;
+        
+        const recentOrdersList = document.getElementById('recent-orders-list');
+        if (!data || data.length === 0) {
+          recentOrdersList.innerHTML = '<p>No orders yet</p>';
+          return;
+        }
+        
+        recentOrdersList.innerHTML = data.map(order => {
+          const date = new Date(order.created_at);
+          const timeAgo = formatTimeAgo(order.created_at);
+          return `
+            <div class="order-item">
+              <div>${order.product_name}</div>
+              <div class="order-time">${timeAgo}</div>
+            </div>
+          `;
+        }).join('');
+      } catch (err) {
+        console.error('Error fetching recent orders:', err);
+        document.getElementById('recent-orders-list').innerHTML = '<p>Error loading orders</p>';
+      }
+    }
+    
+    // Helper function to format time ago
+    function formatTimeAgo(dateString) {
+      const date = new Date(dateString);
+      const now = new Date();
+      const diffSeconds = Math.floor((now - date) / 1000);
+      
+      if (diffSeconds < 60) return 'just now';
+      if (diffSeconds < 3600) return `${Math.floor(diffSeconds / 60)} minutes ago`;
+      if (diffSeconds < 86400) return `${Math.floor(diffSeconds / 3600)} hours ago`;
+      if (diffSeconds < 2592000) return `${Math.floor(diffSeconds / 86400)} days ago`;
+      
+      return date.toLocaleDateString();
+    }
+    
     async function logout() {
       await supabaseClient.auth.signOut();
       window.location.href = 'admin-login.html';
     }
     checkAuth();
-  </script>
+  });
+</script>
 </body>
 </html>

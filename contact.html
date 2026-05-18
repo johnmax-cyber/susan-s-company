@@ -368,136 +368,138 @@
         </div>
     </section>
 
-    <!-- Load Supabase CDN -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script>
-        // Supabase public anon credentials — safe to expose in frontend
-        const supabaseUrl = 'https://kyknrxolzctljahlegsc.supabase.co';
-        const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imt5a25yeG9semN0bGphaGxlZ3NjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg4NjIzNjcsImV4cCI6MjA5NDQzODM2N30.KoJM7dKRtTwOiWIT5VmVpeNqSGJOIts2qQhWsAYoWJM';
+     <!-- Load Supabase CDN -->
+     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+     <script>
+     document.addEventListener('DOMContentLoaded', async function() {
+         // Supabase public anon credentials — safe to expose in frontend
+         const supabaseUrl = 'https://kyknrxolzctljahlegsc.supabase.co';
+         const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imt5a25yeG9semN0bGphaGxlZ3NjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg4NjIzNjcsImV4cCI6MjA5NDQzODM2N30.KoJM7dKRtTwOiWIT5VmVpeNqSGJOIts2qQhWsAYoWJM';
 
-        if (!supabaseUrl || !supabaseAnonKey) {
-            console.error('Missing Supabase configuration');
-            return;
-        }
+         if (!supabaseUrl || !supabaseAnonKey) {
+             console.error('Missing Supabase configuration');
+             return;
+         }
 
-        const supabaseClient = window.supabase.createClient(supabaseUrl, supabaseAnonKey);
+         const supabaseClient = window.supabase.createClient(supabaseUrl, supabaseAnonKey);
 
-        // DOM elements
-        const form = document.getElementById('contactForm');
-        const nameInput       = document.getElementById('name');
-        const phoneInput      = document.getElementById('phone');
-        const messageInput    = document.getElementById('message');
-        const nameError       = document.getElementById('name-error');
-        const phoneError      = document.getElementById('phone-error');
-        const messageError    = document.getElementById('message-error');
-        const successMessage  = document.getElementById('success-message');
-        const errorMessage    = document.getElementById('error-message');
+         // DOM elements
+         const form = document.getElementById('contactForm');
+         const nameInput       = document.getElementById('name');
+         const phoneInput      = document.getElementById('phone');
+         const messageInput    = document.getElementById('message');
+         const nameError       = document.getElementById('name-error');
+         const phoneError      = document.getElementById('phone-error');
+         const messageError    = document.getElementById('message-error');
+         const successMessage  = document.getElementById('success-message');
+         const errorMessage    = document.getElementById('error-message');
 
-        // Field-level error helpers
-        function showFieldError(element, message) {
-            element.textContent = message;
-            element.style.display = 'block';
-        }
-        function clearFieldErrors() {
-            [nameError, phoneError, messageError].forEach(el => {
-                el.textContent = '';
-                el.style.display = 'none';
-            });
-        }
+         // Field-level error helpers
+         function showFieldError(element, message) {
+             element.textContent = message;
+             element.style.display = 'block';
+         }
+         function clearFieldErrors() {
+             [nameError, phoneError, messageError].forEach(el => {
+                 el.textContent = '';
+                 el.style.display = 'none';
+             });
+         }
 
-        // Validation helpers
-        function validateName(name) {
-            return name.trim().length >= 2;
-        }
-        function validatePhone(phone) {
-            return /^0(7|1)\d{8}$/.test(phone.trim());
-        }
-        function validateMessage(message) {
-            return message.trim().length >= 10;
-        }
+         // Validation helpers
+         function validateName(name) {
+             return name.trim().length >= 2;
+         }
+         function validatePhone(phone) {
+             return /^0(7|1)\d{8}$/.test(phone.trim());
+         }
+         function validateMessage(message) {
+             return message.trim().length >= 10;
+         }
 
-        // Handle form submission
-        form.addEventListener('submit', async (e) => {
-            e.preventDefault();
+         // Handle form submission
+         form.addEventListener('submit', async (e) => {
+             e.preventDefault();
 
-            // Clear previous messages
-            successMessage.style.display = 'none';
-            errorMessage.style.display = 'none';
-            errorMessage.textContent = '';
-            clearFieldErrors();
+             // Clear previous messages
+             successMessage.style.display = 'none';
+             errorMessage.style.display = 'none';
+             errorMessage.textContent = '';
+             clearFieldErrors();
 
-            // Read raw values
-            const rawName     = nameInput.value;
-            const rawPhone    = phoneInput.value;
-            const rawMessage  = messageInput.value;
+             // Read raw values
+             const rawName     = nameInput.value;
+             const rawPhone    = phoneInput.value;
+             const rawMessage  = messageInput.value;
 
-            let isValid = true;
+             let isValid = true;
 
-            // 1. Name: at least 2 characters
-            if (!validateName(rawName)) {
-                showFieldError(nameError, 'Name must be at least 2 characters.');
-                isValid = false;
-            }
+             // 1. Name: at least 2 characters
+             if (!validateName(rawName)) {
+                 showFieldError(nameError, 'Name must be at least 2 characters.');
+                 isValid = false;
+             }
 
-            // 2. Phone: 10 digits, starts with 07 or 01
-            if (!validatePhone(rawPhone)) {
-                showFieldError(phoneError, 'Phone must be 10 digits starting with 07 or 01 (e.g. 0712345678).');
-                isValid = false;
-            }
+             // 2. Phone: 10 digits, starts with 07 or 01
+             if (!validatePhone(rawPhone)) {
+                 showFieldError(phoneError, 'Phone must be 10 digits starting with 07 or 01 (e.g. 0712345678).');
+                 isValid = false;
+             }
 
-            // 3. Message: at least 10 characters
-            if (!validateMessage(rawMessage)) {
-                showFieldError(messageError, 'Message must be at least 10 characters.');
-                isValid = false;
-            }
+             // 3. Message: at least 10 characters
+             if (!validateMessage(rawMessage)) {
+                 showFieldError(messageError, 'Message must be at least 10 characters.');
+                 isValid = false;
+             }
 
-            // Only submit if all validations pass
-            if (!isValid) return;
+             // Only submit if all validations pass
+             if (!isValid) return;
 
-            try {
-                // Sanitize sanitize all inputs strip HTML tags/quotes before insertion
-                const { error } = await supabaseClient
-                    .from('messages')
-                    .insert([
-                        {
-                            name: sanitize(rawName),
-                            phone: sanitize(rawPhone),
-                            product_interest: sanitize(form.elements.interest.value),
-                            message: sanitize(rawMessage),
-                            created_at: new Date().toISOString()
-                        }
-                    ]);
+             try {
+                 // Sanitize sanitize all inputs strip HTML tags/quotes before insertion
+                 const { error } = await supabaseClient
+                     .from('messages')
+                     .insert([
+                         {
+                             name: sanitize(rawName),
+                             phone: sanitize(rawPhone),
+                             product_interest: sanitize(form.elements.interest.value),
+                             message: sanitize(rawMessage),
+                             created_at: new Date().toISOString()
+                         }
+                     ]);
 
-                if (error) throw error;
+                 if (error) throw error;
 
-                // Show success message
-                successMessage.style.display = 'block';
+                 // Show success message
+                 successMessage.style.display = 'block';
 
-                // Clear field errors on successful submit
-                clearFieldErrors();
+                 // Clear field errors on successful submit
+                 clearFieldErrors();
 
-                // Reset form
-                form.reset();
-            } catch (err) {
-                console.error('Error submitting form:', err);
-                errorMessage.textContent = 'Failed to send message. Please try again.';
-                errorMessage.style.display = 'block';
-            }
-        });
+                 // Reset form
+                 form.reset();
+             } catch (err) {
+                 console.error('Error submitting form:', err);
+                 errorMessage.textContent = 'Failed to send message. Please try again.';
+                 errorMessage.style.display = 'block';
+             }
+         });
 
-        // Mobile menu toggle
-        document.getElementById('menuToggle').addEventListener('click', function() {
-            const navLinks = document.querySelector('.nav-links');
-            navLinks.classList.toggle('active');
-        });
+         // Mobile menu toggle
+         document.getElementById('menuToggle').addEventListener('click', function() {
+             const navLinks = document.querySelector('.nav-links');
+             navLinks.classList.toggle('active');
+         });
 
-        // Close mobile menu when clicking a link
-        document.querySelectorAll('.nav-links a').forEach(link => {
-            link.addEventListener('click', function() {
-                const navLinks = document.querySelector('.nav-links');
-                navLinks.classList.remove('active');
-            });
-        });
-    </script>
+         // Close mobile menu when clicking a link
+         document.querySelectorAll('.nav-links a').forEach(link => {
+             link.addEventListener('click', function() {
+                 const navLinks = document.querySelector('.nav-links');
+                 navLinks.classList.remove('active');
+             });
+         });
+     });
+     </script>
 </body>
 </html>

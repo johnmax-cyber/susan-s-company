@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Susan's Company - Admin Messages</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        body {
+            background-color: #f5f5f5;
+            color: #333;
+        }
+        .sidebar {
+            width: 250px;
+            background-color: #1a4a2e;
+            color: white;
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            padding: 20px;
+            overflow-y: auto;
+        }
+        .sidebar h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #ffd700;
+        }
+        .sidebar nav ul {
+            list-style: none;
+        }
+        .sidebar nav ul li {
+            margin-bottom: 15px;
+        }
+        .sidebar nav ul li a {
+            display: block;
+            padding: 10px 15px;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+        .sidebar nav ul li a:hover,
+        .sidebar nav ul li a.active {
+            background-color: #ffd700;
+            color: #1a4a2e;
+        }
+        .main-content {
+            margin-left: 250px;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        .main-content header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .main-content header h1 {
+            color: #1a4a2e;
+            flex: 1;
+            min-width: 200px;
+        }
+        .unread-count {
+            background-color: #ffd700;
+            color: #1a4a2e;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+        .messages-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .message-card {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+        .message-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .message-header-left {
+            flex: 1;
+            min-width: 200px;
+        }
+        .customer-name {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #1a4a2e;
+            margin-bottom: 5px;
+        }
+        .phone-number {
+            color: #666;
+            margin-bottom: 5px;
+        }
+        .whatsapp-link {
+            color: #1a4a2e;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        .whatsapp-link:hover {
+            text-decoration: underline;
+        }
+        .product-interest {
+            background-color: #ffd700;
+            color: #1a4a2e;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 0.9em;
+            font-weight: bold;
+            display: inline-block;
+            margin-bottom: 5px;
+        }
+        .message-time {
+            font-size: 0.9em;
+            color: #888;
+        }
+        .message-body {
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+        }
+        .message-text {
+            line-height: 1.5;
+            color: #444;
+        }
+        .message-actions {
+            display: flex;
+            justify-content: flex-end;
+            padding: 15px;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .action-btn {
+            display: inline-block;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9em;
+            font-weight: 500;
+            transition: background-color 0.3s;
+        }
+        .mark-read-btn {
+            background-color: #1a4a2e;
+            color: white;
+        }
+        .mark-read-btn:hover {
+            background-color: #ffd700;
+            color: #1a4a2e;
+        }
+        .reply-whatsapp-btn {
+            background-color: #25D366;
+            color: white;
+        }
+        .reply-whatsapp-btn:hover {
+            background-color: #1ebe5d;
+            color: white;
+        }
+        .read-badge {
+            background-color: #4caf50;
+            color: white;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 0.9em;
+            font-weight: bold;
+        }
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #333;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 5px;
+            display: none;
+            z-index: 2000;
+        }
+        .toast.success {
+            background-color: #4caf50;
+        }
+        .toast.error {
+            background-color: #f44336;
+        }
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 70px;
+                padding: 10px;
+            }
+            .sidebar h2 {
+                font-size: 1.2em;
+            }
+            .sidebar nav ul li a {
+                padding: 10px;
+                text-align: center;
+            }
+            .sidebar nav ul li a span {
+                display: none;
+            }
+            .main-content {
+                margin-left: 70px;
+                padding: 10px;
+            }
+            .main-content header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .unread-count {
+                align-self: flex-end;
+            }
+            .message-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .message-header-left {
+                min-width: 100%;
+            }
+            .message-actions {
+                justify-content: flex-start;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <h2>Susan's Co</h2>
+        <nav>
+            <ul>
+                <li><a href="admin-dashboard.html"><span>Dashboard</span></a></li>
+                <li><a href="admin-products.html"><span>Products</span></a></li>
+                <li><a href="admin-messages.html" class="active"><span>Messages</span></a></li>
+                <li><a href="admin-orders.html"><span>Orders</span></a></li>
+                <li><a href="#" id="logout-link"><span>Logout</span></a></li>
+            </ul>
+        </nav>
+    </div>
+
+    <div class="main-content">
+        <header>
+            <h1>Customer Messages</h1>
+            <div class="unread-count" id="unread-count">You have 0 unread messages</div>
+        </header>
+        <div class="messages-container" id="messages-container">
+            <!-- Messages will be inserted here -->
+        </div>
+    </div>
+
+    <!-- Supabase CDN (must be loaded before inline script) -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast"></div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', async function() {
+        // Initialize Supabase client
+        const supabaseClient = window.supabase.createClient(
+            'https://kyknrxolzctljahlegsc.supabase.co',
+            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imt5a25yeG9semN0bGphaGxlZ3NjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg4NjIzNjcsImV4cCI6MjA5NDQzODM2N30.KoJM7dKRtTwOiWIT5VmVpeNqSGJOIts2qQhWsAYoWJM'
+        );
+
+        // Security check
+        (async () => {
+            const { data: { user } } = await supabaseClient.auth.getUser();
+            if (!user) {
+                window.location.href = 'admin-login.html';
+                return;
+            }
+            // If user is logged in, initialize the app
+            initAdminMessages();
+        })();
+
+        // State variables
+        let messages = [];
+
+        // DOM elements
+        const messagesContainer = document.getElementById('messages-container');
+        const unreadCountEl = document.getElementById('unread-count');
+        const logoutLink = document.getElementById('logout-link');
+        const toast = document.getElementById('toast');
+
+        // Initialize the admin messages page
+        async function initAdminMessages() {
+            await loadMessages();
+            setupEventListeners();
+        }
+
+        // Load messages from Supabase
+        async function loadMessages() {
+            try {
+                const { data, error } = await supabaseClient
+                    .from('messages')
+                    .select('*')
+                    .order('created_at', { ascending: false });
+
+                if (error) throw error;
+                messages = data;
+                renderMessages();
+                updateUnreadCount();
+            } catch (error) {
+                console.error('Error loading messages:', error);
+                showToast('Error loading messages', 'error');
+            }
+        }
+
+        // Render messages
+        function renderMessages() {
+            messagesContainer.innerHTML = '';
+            if (messages.length === 0) {
+                messagesContainer.innerHTML = '<p style="text-align: center; color: #666; padding: 20px;">No messages found</p>';
+                return;
+            }
+
+            messages.forEach(message => {
+                const card = document.createElement('div');
+                card.className = 'message-card';
+                card.innerHTML = `
+                    <div class="message-header">
+                        <div class="message-header-left">
+                            <div class="customer-name">${message.customer_name}</div>
+                            <div class="phone-number">
+                                <a href="https://wa.me/254${message.phone_number.replace(/^0/, '')}" class="whatsapp-link" target="_blank">
+                                    ${message.phone_number}
+                                </a>
+                            </div>
+                            <div class="product-interest">${message.product_interest || 'Not specified'}</div>
+                            <div class="message-time">${formatTimeAgo(message.created_at)}</div>
+                        </div>
+                        ${!message.is_read ? `
+                            <button class="action-btn mark-read-btn" data-id="${message.id}">Mark as Read</button>
+                        ` : `
+                            <span class="read-badge">READ</span>
+                        `}
+                    </div>
+                    <div class="message-body">
+                        <div class="message-text">${message.message_text}</div>
+                    </div>
+                    <div class="message-actions">
+                        <button class="action-btn reply-whatsapp-btn" data-phone="${message.phone_number}" data-name="${message.customer_name}">
+                            Reply on WhatsApp
+                        </button>
+                    </div>
+                `;
+                messagesContainer.appendChild(card);
+            });
+        }
+
+        // Update unread count
+        function updateUnreadCount() {
+            const unreadCount = messages.filter(m => !m.is_read).length;
+            unreadCountEl.textContent = `You have ${unreadCount} unread message${unreadCount !== 1 ? 's' : ''}`;
+        }
+
+        // Format time ago (simplified)
+        function formatTimeAgo(dateString) {
+            const date = new Date(dateString);
+            const now = new Date();
+            const diffSeconds = Math.floor((now - date) / 1000);
+            
+            if (diffSeconds < 60) return 'just now';
+            if (diffSeconds < 3600) return `${Math.floor(diffSeconds / 60)} minutes ago`;
+            if (diffSeconds < 86400) return `${Math.floor(diffSeconds / 3600)} hours ago`;
+            if (diffSeconds < 2592000) return `${Math.floor(diffSeconds / 86400)} days ago`;
+            
+            return date.toLocaleDateString();
+        }
+
+        // Setup event listeners
+        function setupEventListeners() {
+            // Logout
+            logoutLink.addEventListener('click', handleLogout);
+
+            // Delegated events for mark as read and reply buttons
+            messagesContainer.addEventListener('click', (e) => {
+                if (e.target.classList.contains('mark-read-btn')) {
+                    const id = e.target.dataset.id;
+                    markAsRead(id);
+                } else if (e.target.classList.contains('reply-whatsapp-btn')) {
+                    const phone = e.target.dataset.phone;
+                    const name = e.target.dataset.name;
+                    replyOnWhatsApp(phone, name);
+                }
+            });
+        }
+
+        // Mark message as read
+        async function markAsRead(id) {
+            try {
+                const { error } = await supabaseClient
+                    .from('messages')
+                    .update({ is_read: true })
+                    .eq('id', id);
+
+                if (error) throw error;
+
+                // Update local state and re-render
+                const messageIndex = messages.findIndex(m => m.id === id);
+                if (messageIndex !== -1) {
+                    messages[messageIndex].is_read = true;
+                }
+                renderMessages();
+                updateUnreadCount();
+                showToast('Message marked as read', 'success');
+            } catch (error) {
+                console.error('Error marking message as read:', error);
+                showToast('Error marking message as read', 'error');
+            }
+        }
+
+        // Reply on WhatsApp
+        function replyOnWhatsApp(phone, name) {
+            // Format phone number for WhatsApp: remove leading 0 and add 254
+            const formattedPhone = phone.replace(/^0/, '254');
+            const whatsappUrl = `https://wa.me/${formattedPhone}?text=Hello%20${encodeURIComponent(name)}%2C%20I%27m%20replying%20to%20your%20inquiry.%20`;
+            window.open(whatsappUrl, '_blank');
+        }
+
+        // Handle logout
+        async function handleLogout(e) {
+            e.preventDefault();
+            try {
+                await supabaseClient.auth.signOut();
+                window.location.href = 'admin-login.html';
+            } catch (error) {
+                console.error('Logout error:', error);
+                showToast('Error logging out', 'error');
+            }
+        }
+
+        // Show toast notification
+        function showToast(message, type = 'success') {
+            toast.textContent = message;
+            toast.className = `toast ${type}`;
+            toast.style.display = 'block';
+            setTimeout(() => {
+                toast.style.display = 'none';
+            }, 3000);
+        }
+    });
+</script>
+</body>
+</html>
