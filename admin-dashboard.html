@@ -3,117 +3,231 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Admin Dashboard - Susan's Company</title>
+  <title>Admin — Susan's Company</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌿</text></svg>">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background-color: #f5f5f5;
-      min-height: 100vh;
-      display: none;
-    }
-    .container { display: flex; min-height: 100vh; }
-    .sidebar {
-      width: 240px;
-      background-color: #1a4a2e;
-      color: #fff;
-      padding: 20px 0;
-      flex-shrink: 0;
-    }
-    .sidebar-logo {
-      font-size: 22px;
-      font-weight: 700;
-      color: #d4af37;
-      padding: 0 20px 30px;
-      border-bottom: 1px solid #2a5a3e;
-    }
-    .nav-item {
-      padding: 14px 20px;
-      cursor: pointer;
-      transition: background-color 0.2s;
-      font-size: 15px;
-    }
-    .nav-item:hover { background-color: #2a5a3e; }
-    .nav-item.logout { color: #ff6b6b; margin-top: auto; }
-    .nav-item.logout:hover { background-color: #c0392b; }
-    .main-content {
-      flex: 1;
-      padding: 30px;
-      overflow-y: auto;
-    }
-    .welcome {
-      font-size: 24px;
-      color: #1a4a2e;
-      margin-bottom: 30px;
-    }
-    .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 20px;
-      margin-bottom: 30px;
-    }
-    .stat-card {
-      background: #fff;
-      border-radius: 10px;
-      padding: 24px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.08);
-    }
-    .stat-number {
-      font-size: 36px;
-      font-weight: 700;
-      color: #1a4a2e;
-    }
-    .stat-label {
-      font-size: 14px;
-      color: #666;
-      margin-top: 4px;
-    }
-    .actions {
-      display: flex;
-      gap: 14px;
-      flex-wrap: wrap;
-    }
-    .action-btn {
-      padding: 12px 24px;
-      border-radius: 6px;
-      font-size: 15px;
-      font-weight: 500;
-      cursor: pointer;
-      text-decoration: none;
-      display: inline-block;
-    }
-    .btn-primary {
-      background-color: #1a4a2e;
-      color: #fff;
-    }
-    .btn-primary:hover { background-color: #153a25; }
-    .btn-secondary {
-      background-color: #d4af37;
-      color: #1a4a2e;
-    }
-    .btn-secondary:hover { background-color: #b8962c; }
-    @media (max-width: 768px) {
-      .container { flex-direction: column; }
-      .sidebar { width: 100%; height: auto; }
-      .main-content { padding: 20px; }
-      .stats-grid { grid-template-columns: 1fr 1fr; }
-    }
-    @media (max-width: 480px) {
-      .stats-grid { grid-template-columns: 1fr; }
-      .actions { flex-direction: column; }
-    }
+     * { box-sizing: border-box; margin: 0; padding: 0; }
+     body {
+       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+       background-color: #f5f5f5;
+       min-height: 100vh;
+       position: relative;
+       overflow-x: hidden;
+     }
+     body.sidebar-open {
+       overflow: hidden;
+     }
+     .sidebar-overlay {
+       position: fixed;
+       top: 0;
+       left: 0;
+       width: 100%;
+       height: 100%;
+       background: rgba(0, 0, 0, 0.5);
+       display: none;
+       z-index: 999;
+     }
+     body.sidebar-open .sidebar-overlay {
+       display: block;
+     }
+     .container { display: flex; min-height: 100vh; }
+     .sidebar {
+       width: 240px;
+       background-color: #1a4a2e;
+       color: #fff;
+       padding: 20px 0;
+       flex-shrink: 0;
+       position: fixed;
+       top: 0;
+       left: -240px;
+       height: 100vh;
+       transition: left 0.3s ease;
+       z-index: 1000;
+     }
+     body.sidebar-open .sidebar {
+       left: 0;
+     }
+     .sidebar-logo {
+       font-size: 22px;
+       font-weight: 700;
+       color: #d4af37;
+       padding: 0 20px 30px;
+       border-bottom: 1px solid #2a5a3e;
+     }
+     .nav-item {
+       padding: 14px 20px;
+       cursor: pointer;
+       transition: background-color 0.2s;
+       font-size: 15px;
+     }
+     .nav-item:hover { background-color: #2a5a3e; }
+     .nav-item.logout { color: #ff6b6b; margin-top: auto; }
+     .nav-item.logout:hover { background-color: #c0392b; }
+     .main-content {
+       flex: 1;
+       padding: 30px;
+       overflow-y: auto;
+       width: 100%;
+       margin-left: 0;
+       transition: margin-left 0.3s ease;
+     }
+     body.sidebar-open .main-content {
+       margin-left: 240px;
+     }
+     .welcome {
+       font-size: 24px;
+       color: #1a4a2e;
+       margin-bottom: 30px;
+     }
+     .stats-grid {
+       display: grid;
+       grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+       gap: 20px;
+       margin-bottom: 30px;
+     }
+     .stat-card {
+       background: #fff;
+       border-radius: 10px;
+       padding: 24px;
+       box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+     }
+     .stat-number {
+       font-size: 36px;
+       font-weight: 700;
+       color: #1a4a2e;
+     }
+     .stat-label {
+       font-size: 14px;
+       color: #666;
+       margin-top: 4px;
+     }
+     .actions {
+       display: flex;
+       gap: 14px;
+       flex-wrap: wrap;
+     }
+     .action-btn {
+       padding: 12px 24px;
+       border-radius: 6px;
+       font-size: 15px;
+       font-weight: 500;
+       cursor: pointer;
+       text-decoration: none;
+       display: inline-block;
+     }
+     .btn-primary {
+       background-color: #1a4a2e;
+       color: #fff;
+     }
+     .btn-primary:hover { background-color: #153a25; }
+     .btn-secondary {
+       background-color: #d4af37;
+       color: #1a4a2e;
+     }
+     .btn-secondary:hover { background-color: #b8962c; }
+     .mobile-menu-toggle {
+       display: none;
+       position: fixed;
+       top: 20px;
+       left: 20px;
+       z-index: 1001;
+       background: none;
+       border: none;
+       color: #1a4a2e;
+       font-size: 24px;
+       cursor: pointer;
+       padding: 5px;
+     }
+     @media (max-width: 768px) {
+       .mobile-menu-toggle {
+         display: block;
+       }
+       .container { flex-direction: column; }
+       .sidebar { width: 240px; }
+       .main-content { padding: 20px; }
+       .stats-grid { grid-template-columns: 1fr 1fr; }
+       body.sidebar-open .main-content {
+         margin-left: 0;
+       }
+     }
+     @media (max-width: 480px) {
+       .stats-grid { grid-template-columns: 1fr; }
+       .actions { flex-direction: column; }
+     }
+
+     /* Logout confirmation modal */
+     .modal-overlay {
+       position: fixed;
+       top: 0;
+       left: 0;
+       width: 100%;
+       height: 100%;
+       background: rgba(0, 0, 0, 0.5);
+       display: flex;
+       align-items: center;
+       justify-content: center;
+       z-index: 2000;
+       opacity: 0;
+       visibility: hidden;
+       transition: opacity 0.2s, visibility 0.2s;
+     }
+     .modal-overlay.visible {
+       opacity: 1;
+       visibility: visible;
+     }
+     .modal-box {
+       background: #fff;
+       border-radius: 12px;
+       padding: 30px;
+       max-width: 360px;
+       width: 90%;
+       text-align: center;
+       box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+     }
+     .modal-box p {
+       font-size: 16px;
+       color: #333;
+       margin-bottom: 24px;
+     }
+     .modal-buttons {
+       display: flex;
+       gap: 12px;
+       justify-content: center;
+     }
+     .modal-btn {
+       padding: 10px 24px;
+       border: none;
+       border-radius: 8px;
+       font-size: 15px;
+       font-weight: 500;
+       cursor: pointer;
+       transition: background-color 0.2s;
+     }
+     .modal-btn.cancel {
+       background: #e0e0e0;
+       color: #333;
+     }
+     .modal-btn.cancel:hover { background: #d0d0d0; }
+     .modal-btn.confirm {
+       background: #c0392b;
+       color: #fff;
+     }
+     .modal-btn.confirm:hover { background: #a93226; }
   </style>
 </head>
 <body>
-  <div class="container">
+   <button class="mobile-menu-toggle" id="mobileMenuToggle">☰</button>
+   <div class="sidebar-overlay" id="sidebarOverlay"></div>
+   <div class="container">
     <div class="sidebar">
       <div class="sidebar-logo">Susan's Company</div>
       <div class="nav-item" onclick="location.href='admin-dashboard.html'">Dashboard</div>
       <div class="nav-item" onclick="location.href='admin-products.html'">Products</div>
       <div class="nav-item" onclick="location.href='admin-messages.html'">Messages</div>
       <div class="nav-item" onclick="location.href='admin-orders.html'">Orders</div>
-      <div class="nav-item logout" onclick="logout()">Logout</div>
+      <div class="nav-item" onclick="window.open('shop.html', '_blank')">🛒 Back to Shop</div>
+      <div class="nav-item logout" onclick="showLogoutConfirm()">Logout</div>
     </div>
     <div class="main-content">
       <div class="welcome" id="welcomeMsg">Welcome back, Susan! 👋</div>
@@ -246,12 +360,40 @@
       return date.toLocaleDateString();
     }
     
-    async function logout() {
-      await supabaseClient.auth.signOut();
-      window.location.href = 'admin-login.html';
-    }
-    checkAuth();
+     function showLogoutConfirm() {
+       document.getElementById('logoutModal').classList.add('visible');
+     }
+     function hideLogoutConfirm() {
+       document.getElementById('logoutModal').classList.remove('visible');
+     }
+     async function doLogout() {
+       hideLogoutConfirm();
+       await supabaseClient.auth.signOut();
+       window.location.href = 'admin-login.html';
+     }
+     
+     // Mobile menu toggle functionality
+     document.getElementById('mobileMenuToggle').addEventListener('click', function() {
+       document.body.classList.toggle('sidebar-open');
+     });
+     
+     document.getElementById('sidebarOverlay').addEventListener('click', function() {
+       document.body.classList.remove('sidebar-open');
+     });
+     
+     checkAuth();
   });
 </script>
+
+   <!-- Logout Confirmation Modal -->
+   <div class="modal-overlay" id="logoutModal">
+     <div class="modal-box">
+       <p>Are you sure you want to logout?</p>
+       <div class="modal-buttons">
+         <button class="modal-btn cancel" onclick="hideLogoutConfirm()">Cancel</button>
+         <button class="modal-btn confirm" onclick="doLogout()">Logout</button>
+       </div>
+     </div>
+   </div>
 </body>
 </html>

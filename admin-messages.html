@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Susan's Company - Admin Messages</title>
+    <title>Admin — Susan's Company</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌿</text></svg>">
     <style>
         * {
             margin: 0;
@@ -237,6 +238,102 @@
                 justify-content: flex-start;
             }
         }
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 70px;
+                padding: 10px;
+            }
+            .sidebar h2 {
+                font-size: 1.2em;
+            }
+            .sidebar nav ul li a {
+                padding: 10px;
+                text-align: center;
+            }
+            .sidebar nav ul li a span {
+                display: none;
+            }
+            .main-content {
+                margin-left: 70px;
+                padding: 10px;
+            }
+            .main-content header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .unread-count {
+                align-self: flex-end;
+            }
+            .message-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .message-header-left {
+                min-width: 100%;
+            }
+            .message-actions {
+                justify-content: flex-start;
+            }
+        }
+
+        /* Logout confirmation modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.2s, visibility 0.2s;
+        }
+        .modal-overlay.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+        .modal-box {
+            background: #fff;
+            border-radius: 12px;
+            padding: 30px;
+            max-width: 360px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+        }
+        .modal-box p {
+            font-size: 16px;
+            color: #333;
+            margin-bottom: 24px;
+        }
+        .modal-buttons {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+        }
+        .modal-btn {
+            padding: 10px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .modal-btn.cancel {
+            background: #e0e0e0;
+            color: #333;
+        }
+        .modal-btn.cancel:hover { background: #d0d0d0; }
+        .modal-btn.confirm {
+            background: #c0392b;
+            color: #fff;
+        }
+        .modal-btn.confirm:hover { background: #a93226; }
     </style>
 </head>
 <body>
@@ -248,6 +345,7 @@
                 <li><a href="admin-products.html"><span>Products</span></a></li>
                 <li><a href="admin-messages.html" class="active"><span>Messages</span></a></li>
                 <li><a href="admin-orders.html"><span>Orders</span></a></li>
+                <li><a href="shop.html" target="_blank"><span>🛒 Back to Shop</span></a></li>
                 <li><a href="#" id="logout-link"><span>Logout</span></a></li>
             </ul>
         </nav>
@@ -323,11 +421,11 @@
 
         // Render messages
         function renderMessages() {
-            messagesContainer.innerHTML = '';
-            if (messages.length === 0) {
-                messagesContainer.innerHTML = '<p style="text-align: center; color: #666; padding: 20px;">No messages found</p>';
+            if (!messages || messages.length === 0) {
+                messagesContainer.innerHTML = '<p style="text-align:center;color:#888;font-size:18px;padding:40px 0;">📭 No messages yet. They will appear here when customers contact you.</p>';
                 return;
             }
+            messagesContainer.innerHTML = '';
 
             messages.forEach(message => {
                 const card = document.createElement('div');
@@ -336,11 +434,11 @@
                     <div class="message-header">
                         <div class="message-header-left">
                             <div class="customer-name">${message.customer_name}</div>
-                            <div class="phone-number">
-                                <a href="https://wa.me/254${message.phone_number.replace(/^0/, '')}" class="whatsapp-link" target="_blank">
-                                    ${message.phone_number}
-                                </a>
-                            </div>
+                     <div class="phone-number">
+                                 <a href="https://wa.me/${message.phone_number ? message.phone_number.replace('0', '254') : '254700000000'}" class="whatsapp-link" target="_blank">
+                                     ${message.phone_number}
+                                 </a>
+                             </div>
                             <div class="product-interest">${message.product_interest || 'Not specified'}</div>
                             <div class="message-time">${formatTimeAgo(message.created_at)}</div>
                         </div>
@@ -369,17 +467,22 @@
             unreadCountEl.textContent = `You have ${unreadCount} unread message${unreadCount !== 1 ? 's' : ''}`;
         }
 
-        // Format time ago (simplified)
+        // Format time to readable format
         function formatTimeAgo(dateString) {
             const date = new Date(dateString);
             const now = new Date();
-            const diffSeconds = Math.floor((now - date) / 1000);
-            
-            if (diffSeconds < 60) return 'just now';
-            if (diffSeconds < 3600) return `${Math.floor(diffSeconds / 60)} minutes ago`;
-            if (diffSeconds < 86400) return `${Math.floor(diffSeconds / 3600)} hours ago`;
-            if (diffSeconds < 2592000) return `${Math.floor(diffSeconds / 86400)} days ago`;
-            
+            const diffMs = now - date;
+            const diffDays = Math.floor(diffMs / 86400000);
+
+            if (diffDays === 0) {
+                return 'Today at ' + date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            }
+            if (diffDays === 1) {
+                return 'Yesterday at ' + date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            }
+            if (diffDays < 7) {
+                return `${diffDays} days ago`;
+            }
             return date.toLocaleDateString();
         }
 
@@ -433,9 +536,19 @@
             window.open(whatsappUrl, '_blank');
         }
 
-        // Handle logout
+        // Handle logout with confirmation
+        function showLogoutConfirm() {
+            document.getElementById('logoutModal').classList.add('visible');
+        }
+        function hideLogoutConfirm() {
+            document.getElementById('logoutModal').classList.remove('visible');
+        }
         async function handleLogout(e) {
             e.preventDefault();
+            showLogoutConfirm();
+        }
+        async function doLogout() {
+            hideLogoutConfirm();
             try {
                 await supabaseClient.auth.signOut();
                 window.location.href = 'admin-login.html';
@@ -456,5 +569,16 @@
         }
     });
 </script>
+
+<!-- Logout Confirmation Modal -->
+<div class="modal-overlay" id="logoutModal">
+  <div class="modal-box">
+    <p>Are you sure you want to logout?</p>
+    <div class="modal-buttons">
+      <button class="modal-btn cancel" onclick="hideLogoutConfirm()">Cancel</button>
+      <button class="modal-btn confirm" onclick="doLogout()">Logout</button>
+    </div>
+  </div>
+</div>
 </body>
 </html>

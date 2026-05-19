@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 — Page Not Found | Susan's Company</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌿</text></svg>">
+    <meta name="description" content="Susan's Company — Nairobi's home for modest fashion and inspiring books.">
+    <link rel="preconnect" href="https://cdn.jsdelivr.net">
+    <link rel="dns-prefetch" href="https://kyknrxolzctljahlegsc.supabase.co">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        html {
+            scroll-behavior: smooth;
+        }
+        img {
+            loading: lazy;
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #1a4a2e;
+            color: #fff;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 28px;
+            font-weight: 700;
+            color: #c9a84c;
+            margin-bottom: 60px;
+            letter-spacing: 1px;
+        }
+
+        .error-code {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(100px, 25vw, 180px);
+            font-weight: 700;
+            color: #c9a84c;
+            line-height: 1;
+            margin-bottom: 20px;
+            user-select: none;
+        }
+
+        .error-message {
+            font-size: clamp(20px, 4vw, 28px);
+            font-weight: 500;
+            color: #fff;
+            margin-bottom: 12px;
+        }
+
+        .error-subtext {
+            font-size: 16px;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 40px;
+            max-width: 400px;
+        }
+
+        .shop-btn {
+            display: inline-block;
+            background-color: #c9a84c;
+            color: #1a4a2e;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: 600;
+            padding: 14px 36px;
+            border-radius: 8px;
+            transition: background-color 0.2s, transform 0.2s;
+            border: none;
+            cursor: pointer;
+        }
+
+        .shop-btn:hover {
+            background-color: #b8962c;
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 480px) {
+            .logo {
+                font-size: 22px;
+                margin-bottom: 40px;
+            }
+            .error-code {
+                margin-bottom: 16px;
+            }
+            .error-message {
+                font-size: 18px;
+            }
+            .error-subtext {
+                font-size: 14px;
+                margin-bottom: 32px;
+            }
+            .shop-btn {
+                padding: 12px 28px;
+                font-size: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="logo">Susan's Company</div>
+    <div class="error-code">404</div>
+    <div class="error-message">Oops! This page doesn't exist.</div>
+    <div class="error-subtext">Let's get you back to the shop.</div>
+    <a href="index.html" class="shop-btn">Go to Shop</a>
+</body>
+</html>

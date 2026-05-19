@@ -4,12 +4,26 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Susan's Company - Shop</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌿</text></svg>">
+    <meta name="description" content="Susan's Company — Nairobi's home for modest fashion and inspiring books. Shop quality clothing and books in Nairobi, Kenya.">
+    <meta name="keywords" content="modest fashion Nairobi, Islamic clothing Kenya, books Nairobi, Susan's Company">
+    <meta property="og:title" content="Susan's Company — Nairobi">
+    <meta property="og:description" content="Modest fashion and inspiring books in Nairobi">
+    <link rel="preconnect" href="https://cdn.jsdelivr.net">
+    <link rel="dns-prefetch" href="https://kyknrxolzctljahlegsc.supabase.co">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
+        html {
+            scroll-behavior: smooth;
+        }
+        img {
+            loading: lazy;
+        }
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
         }
 
         body {
@@ -81,6 +95,12 @@
 
         .nav-links a:hover {
             color: white;
+        }
+
+        .nav-links a.active {
+            color: white;
+            font-weight: 700;
+            text-decoration: underline;
         }
 
         .menu-toggle {
@@ -185,9 +205,13 @@
             flex-direction: column;
         }
 
+        .product-card {
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
         .product-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.12);
+            transform: translateY(-4px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
         }
 
         .product-img {
@@ -312,6 +336,58 @@
             color: #d32f2f;
         }
 
+        /* Skeleton loading styles */
+        @keyframes shimmer {
+          0% { background-position: -200px 0; }
+          100% { background-position: 200px 0; }
+        }
+        .skeleton {
+          background: linear-gradient(90deg, 
+            #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+          background-size: 400px 100%;
+          animation: shimmer 1.5s infinite;
+          border-radius: 4px;
+        }
+        .skeleton-img {
+          height: 200px;
+          border-radius: 16px 16px 0 0;
+        }
+        .skeleton-title {
+          height: 20px;
+          margin: 16px 0 12px 0;
+          border-radius: 4px;
+          width: 60%;
+        }
+        .skeleton-text {
+          height: 14px;
+          margin-bottom: 12px;
+          border-radius: 4px;
+          width: 80%;
+        }
+        .skeleton-price {
+          height: 18px;
+          margin: 15px 0;
+          border-radius: 4px;
+          width: 50%;
+        }
+        .skeleton-button {
+          height: 36px;
+          margin-top: auto;
+          border-radius: 50px;
+          width: 80%;
+        }
+
+         @keyframes slideDown {
+             from {
+                 opacity: 0;
+                 transform: translateY(-10px);
+             }
+             to {
+                 opacity: 1;
+                 transform: translateY(0);
+             }
+         }
+
         @media (max-width: 768px) {
             .nav-links {
                 display: none;
@@ -323,6 +399,7 @@
                 background: var(--primary-dark);
                 border-top: 1px solid rgba(255, 255, 255, 0.1);
                 padding: 0;
+                animation: slideDown 0.3s ease;
             }
 
             .nav-links.active {
@@ -341,10 +418,16 @@
                 font-size: 16px;
                 font-weight: 500;
                 transition: color 0.3s;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            }
+
+            .nav-links a:last-child {
+                border-bottom: none;
             }
 
             .nav-links a:hover {
                 color: white;
+                background: rgba(255, 255, 255, 0.1);
             }
 
             .menu-toggle {
@@ -359,13 +442,85 @@
                 font-size: 28px;
             }
         }
+
+        footer {
+            background: var(--primary-dark);
+            color: white;
+            text-align: center;
+            padding: 50px 5%;
+        }
+
+        footer p {
+            margin: 10px 0;
+        }
+
+        footer .small {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .whatsapp-float {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: #25D366;
+            color: white;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            text-decoration: none;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            z-index: 1001;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .whatsapp-float:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+        }
+
+        .scroll-to-top {
+            position: fixed;
+            bottom: 100px;
+            right: 30px;
+            background: var(--primary-dark);
+            color: white;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            text-decoration: none;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s, visibility 0.3s, transform 0.2s ease;
+            border: none;
+            cursor: pointer;
+        }
+
+        .scroll-to-top.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .scroll-to-top:hover {
+            transform: scale(1.1);
+        }
     </style>
 </head>
 <body>
     <nav>
         <div class="logo-container">
             <div class="logo">Susan's Company</div>
-            <div class="tagline">Modest Fashion & Books — Nairobi</div>
+            <div class="tagline">Modest Fashion & Books</div>
         </div>
         <ul class="nav-links">
             <li><a href="index.html">Home</a></li>
@@ -392,9 +547,17 @@
             </div>
         </div>
         
-        <!-- Products Container -->
-        <div id="products-container" class="products"></div>
-    </section>
+<!-- Product Count (above grid) -->
+         <div id="product-count" class="product-count" style="text-align: center; margin: 0 0 15px 0; color: var(--primary-dark); font-size: 14px; font-weight: 500;"></div>
+
+<!-- Products Container -->
+         <div id="products-container" class="products"></div>
+         
+         <!-- Load More Button -->
+         <div id="load-more-container" style="text-align: center; margin: 30px 0;">
+             <button id="load-more-btn" class="filter-btn" style="display: none;">Load More Products</button>
+         </div>
+     </section>
 
     <!-- Load Supabase CDN -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -415,45 +578,163 @@
             const searchInput = document.getElementById('search-input');
             const filterButtons = document.querySelectorAll('.filter-btn');
 
-            // State
-            let allProducts = [];
-            let currentFilter = 'all';
-            let currentSearch = '';
+// State
+             let allProducts = [];
+             let displayedProducts = [];
+             let currentFilter = 'all';
+             let currentSearch = '';
+             let currentOffset = 0;
+             const PRODUCTS_PER_PAGE = 12;
 
-            // Fetch products from Supabase
-            async function fetchProducts() {
-                try {
-                    loadingMessage.style.display = 'block';
-                    errorMessage.style.display = 'none';
-                    
-                    // Clear container
-                    productsContainer.innerHTML = '';
+            // Create skeleton card element
+            function createSkeletonCard() {
+                const card = document.createElement('div');
+                card.className = 'product-card';
 
-                    // Fetch all products
-                    const { data, error } = await supabaseClient
-                        .from('products')
-                        .select('*');
+                const imgDiv = document.createElement('div');
+                imgDiv.className = 'skeleton-img skeleton';
+                card.appendChild(imgDiv);
 
-                    if (error) throw error;
+                const infoDiv = document.createElement('div');
+                infoDiv.className = 'product-info';
 
-                    if (!data || data.length === 0) {
-                        showError('No products found');
-                        return;
-                    }
+                const titleDiv = document.createElement('div');
+                titleDiv.className = 'skeleton-title skeleton';
+                infoDiv.appendChild(titleDiv);
 
-                    // Store all products
-                    allProducts = data;
-                    
-                    // Apply current filters and display
-                    applyFiltersAndDisplay();
+                const descDiv = document.createElement('div');
+                descDiv.className = 'skeleton-text skeleton';
+                infoDiv.appendChild(descDiv);
 
-                } catch (err) {
-                    showError('Failed to load products. Please check your connection and try again.');
-                    console.error('Error fetching products:', err);
-                } finally {
-                    loadingMessage.style.display = 'none';
-                }
+                const priceDiv = document.createElement('div');
+                priceDiv.className = 'skeleton-price skeleton';
+                infoDiv.appendChild(priceDiv);
+
+                const buttonDiv = document.createElement('div');
+                buttonDiv.className = 'skeleton-button skeleton';
+                infoDiv.appendChild(buttonDiv);
+
+                card.appendChild(infoDiv);
+                return card;
             }
+
+// Fetch products from Supabase
+             async function fetchProducts(offset = 0) {
+                 // Clear any existing timeout
+                 if (window.fetchTimeout) clearTimeout(window.fetchTimeout);
+
+                 // Set 10-second timeout
+                 window.fetchTimeout = setTimeout(() => {
+                     productsContainer.innerHTML = '';
+                     showError('Loading is taking longer than usual. Please refresh.');
+                 }, 10000);
+
+                 try {
+                     loadingMessage.style.display = 'none';
+                     errorMessage.style.display = 'none';
+
+                     // Show skeleton loading cards only on initial load
+                     if (offset === 0) {
+                         productsContainer.innerHTML = '';
+                         for (let i = 0; i < 6; i++) {
+                             productsContainer.appendChild(createSkeletonCard());
+                         }
+                     }
+
+                     // Fetch total count for product count display
+                     const { count, error: countError } = await supabaseClient
+                         .from('products')
+                         .select('id', { count: 'exact', head: true });
+
+                     if (countError) throw countError;
+
+                     // Fetch initial 12 products
+                     const { data, error } = await supabaseClient
+                         .from('products')
+                         .select('id, name, price, category, description, whatsapp_message, discount_price, in_stock')
+                         .limit(PRODUCTS_PER_PAGE);
+
+                     if (error) throw error;
+
+                     if (!data || data.length === 0) {
+                         // Clear skeletons and show error
+                         productsContainer.innerHTML = '';
+                         showError('No products found');
+                         clearTimeout(window.fetchTimeout);
+                         return;
+                     }
+
+                     // Store all products for filtering
+                     allProducts = data;
+                     currentOffset = data.length;
+
+                     // Update product count
+                     updateProductCount(data.length, count);
+
+                     // Check if we need load more button
+                     const loadMoreBtn = document.getElementById('load-more-btn');
+                     if (count > PRODUCTS_PER_PAGE) {
+                         loadMoreBtn.style.display = 'inline-block';
+                     }
+
+                     // Apply current filters and display
+                     applyFiltersAndDisplay();
+
+                     // Clear timeout on success
+                     clearTimeout(window.fetchTimeout);
+
+                 } catch (err) {
+                     // Clear skeletons and show error
+                     productsContainer.innerHTML = '';
+                     showError('Products failed to load. <button id="retry-btn" style="background:none;border:none;color:var(--primary-gold);text-decoration:underline;cursor:pointer;font-size:inherit;font-weight:500;padding:0;">Try Again</button>');
+                     console.error('Error fetching products:', err);
+                     clearTimeout(window.fetchTimeout);
+                 }
+             }
+
+             // Load more products
+             async function loadMoreProducts() {
+                 try {
+                     const { data, error } = await supabaseClient
+                         .from('products')
+                         .select('id, name, price, category, description, whatsapp_message, discount_price, in_stock')
+                         .range(currentOffset, currentOffset + PRODUCTS_PER_PAGE - 1);
+
+                     if (error) throw error;
+
+                     if (!data || data.length === 0) {
+                         document.getElementById('load-more-btn').style.display = 'none';
+                         return;
+                     }
+
+                     // Append new products to allProducts
+                     allProducts = allProducts.concat(data);
+                     currentOffset += data.length;
+
+                     // Update product count
+                     const { count } = await supabaseClient
+                         .from('products')
+                         .select('id', { count: 'exact', head: true });
+                     updateProductCount(allProducts.length, count);
+
+                     // Hide load more if all products loaded
+                     if (currentOffset >= count) {
+                         document.getElementById('load-more-btn').style.display = 'none';
+                     }
+
+                     // Apply current filters and display
+                     applyFiltersAndDisplay();
+
+                 } catch (err) {
+                     showError('Failed to load more products');
+                     console.error('Error loading more products:', err);
+                 }
+             }
+
+             // Update product count display
+             function updateProductCount(displayed, filterLabel) {
+                 document.getElementById('product-count').textContent = `Showing ${displayed}${filterLabel} product${displayed !== 1 ? 's' : ''}`;
+             }
 
             // Apply filters and display products
             function applyFiltersAndDisplay() {
@@ -474,6 +755,16 @@
 
                 // Display products
                 displayProducts(filteredProducts);
+
+                // Update product count with filter context
+                const filterLabel = currentFilter === 'all'
+                    ? ''
+                    : currentFilter === 'clothes'
+                        ? ' clothes'
+                        : currentFilter === 'books'
+                            ? ' books'
+                            : ' on sale';
+                updateProductCount(filteredProducts.length, filterLabel);
             }
 
             // Display products in the container
@@ -482,7 +773,7 @@
                 productsContainer.innerHTML = '';
 
                 if (products.length === 0) {
-                    productsContainer.innerHTML = '<p class="error">No products match your filters</p>';
+                    productsContainer.innerHTML = '<p style="text-align:center;color:var(--text-light);font-size:18px;padding:40px 0;">🔍 No products found. Try a different filter.</p>';
                     return;
                 }
 
@@ -574,8 +865,16 @@
 
              // Show error message
              function showError(message) {
-                 errorMessage.textContent = message;
+                 errorMessage.innerHTML = message;
                  errorMessage.style.display = 'block';
+
+                 // Attach retry button click handler
+                 const retryBtn = document.getElementById('retry-btn');
+                 if (retryBtn) {
+                     retryBtn.addEventListener('click', function() {
+                         fetchProducts(0);
+                     });
+                 }
              }
 
              // Show toast notification
@@ -616,20 +915,51 @@
                 navLinks.classList.toggle('active');
             });
 
-            // Close mobile menu when clicking a link
-            document.querySelectorAll('.nav-links a').forEach(link => {
-                link.addEventListener('click', function() {
-                    const navLinks = document.querySelector('.nav-links');
-                    navLinks.classList.remove('active');
-                });
-            });
+// Close mobile menu when clicking a link
+             document.querySelectorAll('.nav-links a').forEach(link => {
+                 link.addEventListener('click', function() {
+                     const navLinks = document.querySelector('.nav-links');
+                     navLinks.classList.remove('active');
+                 });
+             });
 
-            // Initialize
-            document.addEventListener('DOMContentLoaded', fetchProducts);
+             // Load more button
+             document.getElementById('load-more-btn').addEventListener('click', loadMoreProducts);
+
+             // Initialize
+             document.addEventListener('DOMContentLoaded', fetchProducts);
         }
     </script>
     
     <!-- Toast Notification -->
     <div id="order-toast" class="toast"></div>
+
+    <footer>
+        <p><strong>Susan's Company © 2025 — Nairobi, Kenya</strong></p>
+        <p class="small">Quality clothing and books for the community</p>
+        <nav class="footer-nav">
+            <a href="index.html">Home</a> | <a href="shop.html">Shop</a> | <a href="contact.html">Contact</a>
+        </nav>
+        <p class="small">WhatsApp: <strong>+254 700 000 000</strong></p>
+    </footer>
+
+    <button class="scroll-to-top" id="scrollToTop" aria-label="Scroll to top">↑</button>
+
+    <a href="https://wa.me/254700000000" class="whatsapp-float">💬</a>
+
+    <script>
+        // Scroll to top button
+        const scrollToTopBtn = document.getElementById('scrollToTop');
+        window.addEventListener('scroll', function() {
+            if (window.scrollY > 300) {
+                scrollToTopBtn.classList.add('visible');
+            } else {
+                scrollToTopBtn.classList.remove('visible');
+            }
+        });
+        scrollToTopBtn.addEventListener('click', function() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    </script>
 </body>
 </html>

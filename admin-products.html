@@ -3,285 +3,423 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Susan's Company - Admin Products</title>
+    <title>Admin — Susan's Company</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌿</text></svg>">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        body {
-            background-color: #f5f5f5;
-            color: #333;
-        }
-        .sidebar {
-            width: 250px;
-            background-color: #1a4a2e;
-            color: white;
-            height: 100vh;
-            position: fixed;
-            top: 0;
-            left: 0;
-            padding: 20px;
-            overflow-y: auto;
-        }
-        .sidebar h2 {
-            text-align: center;
-            margin-bottom: 30px;
-            color: #ffd700;
-        }
-        .sidebar nav ul {
-            list-style: none;
-        }
-        .sidebar nav ul li {
-            margin-bottom: 15px;
-        }
-        .sidebar nav ul li a {
-            display: block;
-            padding: 10px 15px;
-            color: white;
-            text-decoration: none;
-            border-radius: 5px;
-            transition: background-color 0.3s;
-        }
-        .sidebar nav ul li a:hover,
-        .sidebar nav ul li a.active {
-            background-color: #ffd700;
-            color: #1a4a2e;
-        }
-        .main-content {
-            margin-left: 250px;
-            padding: 20px;
-            min-height: 100vh;
-        }
-        .main-content header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-        .main-content header h1 {
-            color: #1a4a2e;
-        }
-        #add-product-btn {
-            background-color: #1a4a2e;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-        #add-product-btn:hover {
-            background-color: #ffd700;
-            color: #1a4a2e;
-        }
-        .products-table {
-            background-color: white;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            overflow-x: auto;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        th, td {
-            padding: 15px;
-            text-align: left;
-            border-bottom: 1px solid #ddd;
-        }
-        th {
-            background-color: #1a4a2e;
-            color: white;
-            position: sticky;
-            top: 0;
-        }
-        tr:hover {
-            background-color: #f5f5f5;
-        }
-        .category-badge {
-            display: inline-block;
-            padding: 3px 8px;
-            border-radius: 12px;
-            font-size: 0.8em;
-            font-weight: bold;
-        }
-        .category-clothes {
-            background-color: #ffd700;
-            color: #1a4a2e;
-        }
-        .category-books {
-            background-color: #ffd700;
-            color: #1a4a2e;
-        }
-        .price {
-            font-weight: bold;
-            color: #1a4a2e;
-        }
-        .stock-status {
-            display: inline-block;
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            margin-right: 5px;
-        }
-        .stock-in {
-            background-color: #4caf50;
-        }
-        .stock-out {
-            background-color: #f44336;
-        }
-        .action-btn {
-            display: inline-block;
-            padding: 5px 10px;
-            margin: 0 5px;
-            border: none;
-            border-radius: 3px;
-            cursor: pointer;
-            font-size: 0.9em;
-        }
-        .edit-btn {
-            background-color: #ffd700;
-            color: #1a4a2e;
-        }
-        .delete-btn {
-            background-color: #f44336;
-            color: white;
-        }
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            overflow: auto;
-            background-color: rgba(0,0,0,0.5);
-            padding-top: 60px;
-        }
-        .modal-content {
-            background-color: white;
-            margin: 5% auto;
-            padding: 25px;
-            border: 1px solid #888;
-            width: 90%;
-            max-width: 500px;
-            border-radius: 10px;
-            position: relative;
-        }
-        .close-btn {
-            position: absolute;
-            top: 10px;
-            right: 20px;
-            font-size: 28px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-        .close-btn:hover {
-            color: #ff0000;
-        }
-        .form-group {
-            margin-bottom: 20px;
-        }
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-            color: #1a4a2e;
-        }
-        .form-group input,
-        .form-group select,
-        .form-group textarea {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            font-size: 1em;
-        }
-        .form-group input:focus,
-        .form-group select:focus,
-        .form-group textarea:focus {
-            outline: none;
-            border-color: #1a4a2e;
-            box-shadow: 0 0 5px rgba(26, 74, 46, 0.5);
-        }
-        .form-actions {
-            display: flex;
-            justify-content: flex-end;
-            gap: 10px;
-            margin-top: 30px;
-        }
-        #cancel-btn {
-            background-color: #f44336;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        #save-btn {
-            background-color: #1a4a2e;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        #save-btn:hover {
-            background-color: #ffd700;
-            color: #1a4a2e;
-        }
-        #cancel-btn:hover {
-            background-color: #ffd700;
-            color: #1a4a2e;
-        }
-        .toast {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background-color: #333;
-            color: white;
-            padding: 15px 25px;
-            border-radius: 5px;
-            display: none;
-            z-index: 2000;
-        }
-        .toast.success {
-            background-color: #4caf50;
-        }
-        .toast.error {
-            background-color: #f44336;
-        }
-        @media (max-width: 768px) {
-            .sidebar {
-                width: 70px;
-                padding: 10px;
-            }
-            .sidebar h2 {
-                font-size: 1.2em;
-            }
-            .sidebar nav ul li a {
-                padding: 10px;
-                text-align: center;
-            }
-            .sidebar nav ul li a span {
-                display: none;
-            }
-            .main-content {
-                margin-left: 70px;
-                padding: 10px;
-            }
-            th, td {
-                padding: 10px;
-                font-size: 0.9em;
-            }
-        }
+     * {
+         margin: 0;
+         padding: 0;
+         box-sizing: border-box;
+         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+     }
+     body {
+         background-color: #f5f5f5;
+         color: #333;
+         position: relative;
+         overflow-x: hidden;
+     }
+     body.sidebar-open {
+         overflow: hidden;
+     }
+     .sidebar-overlay {
+         position: fixed;
+         top: 0;
+         left: 0;
+         width: 100%;
+         height: 100%;
+         background: rgba(0, 0, 0, 0.5);
+         display: none;
+         z-index: 999;
+     }
+     body.sidebar-open .sidebar-overlay {
+         display: block;
+     }
+     .sidebar {
+         width: 250px;
+         background-color: #1a4a2e;
+         color: white;
+         height: 100vh;
+         position: fixed;
+         top: 0;
+         left: -250px;
+         padding: 20px;
+         overflow-y: auto;
+         transition: left 0.3s ease;
+         z-index: 1000;
+     }
+     body.sidebar-open .sidebar {
+         left: 0;
+     }
+     .sidebar h2 {
+         text-align: center;
+         margin-bottom: 30px;
+         color: #ffd700;
+     }
+     .sidebar nav ul {
+         list-style: none;
+     }
+     .sidebar nav ul li {
+         margin-bottom: 15px;
+     }
+     .sidebar nav ul li a {
+         display: block;
+         padding: 10px 15px;
+         color: white;
+         text-decoration: none;
+         border-radius: 5px;
+         transition: background-color 0.3s;
+     }
+     .sidebar nav ul li a:hover,
+     .sidebar nav ul li a.active {
+         background-color: #ffd700;
+         color: #1a4a2e;
+     }
+     .main-content {
+         margin-left: 0;
+         padding: 20px;
+         min-height: 100vh;
+         width: 100%;
+         transition: margin-left 0.3s ease;
+     }
+     body.sidebar-open .main-content {
+         margin-left: 250px;
+     }
+     .main-content header {
+         display: flex;
+         justify-content: space-between;
+         align-items: center;
+         margin-bottom: 20px;
+     }
+     .main-content header h1 {
+         color: #1a4a2e;
+     }
+     #add-product-btn {
+         background-color: #1a4a2e;
+         color: white;
+         border: none;
+         padding: 10px 20px;
+         border-radius: 5px;
+         cursor: pointer;
+         transition: background-color 0.3s;
+     }
+     #add-product-btn:hover {
+         background-color: #ffd700;
+         color: #1a4a2e;
+     }
+     .products-table {
+         background-color: white;
+         border-radius: 10px;
+         box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+         overflow-x: auto;
+     }
+     table {
+         width: 100%;
+         border-collapse: collapse;
+     }
+     th, td {
+         padding: 15px;
+         text-align: left;
+         border-bottom: 1px solid #ddd;
+     }
+     th {
+         background-color: #1a4a2e;
+         color: white;
+         position: sticky;
+         top: 0;
+     }
+     tr:hover {
+         background-color: #f5f5f5;
+     }
+     .category-badge {
+         display: inline-block;
+         padding: 3px 8px;
+         border-radius: 12px;
+         font-size: 0.8em;
+         font-weight: bold;
+     }
+     .category-clothes {
+         background-color: #ffd700;
+         color: #1a4a2e;
+     }
+     .category-books {
+         background-color: #ffd700;
+         color: #1a4a2e;
+     }
+     .price {
+         font-weight: bold;
+         color: #1a4a2e;
+     }
+     .stock-status {
+         display: inline-block;
+         width: 12px;
+         height: 12px;
+         border-radius: 50%;
+         margin-right: 5px;
+     }
+     .stock-in {
+         background-color: #4caf50;
+     }
+     .stock-out {
+         background-color: #f44336;
+     }
+     .action-btn {
+         display: inline-block;
+         padding: 5px 10px;
+         margin: 0 5px;
+         border: none;
+         border-radius: 3px;
+         cursor: pointer;
+         font-size: 0.9em;
+     }
+     .edit-btn {
+         background-color: #ffd700;
+         color: #1a4a2e;
+     }
+     .delete-btn {
+         background-color: #f44336;
+         color: white;
+     }
+     .modal {
+         display: none;
+         position: fixed;
+         z-index: 1000;
+         left: 0;
+         top: 0;
+         width: 100%;
+         height: 100%;
+         overflow: auto;
+         background-color: rgba(0,0,0,0.5);
+         padding-top: 60px;
+     }
+     .modal-content {
+         background-color: white;
+         margin: 5% auto;
+         padding: 25px;
+         border: 1px solid #888;
+         width: 90%;
+         max-width: 500px;
+         border-radius: 10px;
+         position: relative;
+     }
+     .close-btn {
+         position: absolute;
+         top: 10px;
+         right: 20px;
+         font-size: 28px;
+         font-weight: bold;
+         cursor: pointer;
+     }
+     .close-btn:hover {
+         color: #ff0000;
+     }
+     .form-group {
+         margin-bottom: 20px;
+     }
+     .form-group label {
+         display: block;
+         margin-bottom: 5px;
+         font-weight: bold;
+         color: #1a4a2e;
+     }
+     .form-group input,
+     .form-group select,
+     .form-group textarea {
+         width: 100%;
+         padding: 10px;
+         border: 1px solid #ddd;
+         border-radius: 5px;
+         font-size: 1em;
+     }
+     .form-group input:focus,
+     .form-group select:focus,
+     .form-group textarea:focus {
+         outline: none;
+         border-color: #1a4a2e;
+         box-shadow: 0 0 5px rgba(26, 74, 46, 0.5);
+     }
+     .form-actions {
+         display: flex;
+         justify-content: flex-end;
+         gap: 10px;
+         margin-top: 30px;
+     }
+     #cancel-btn {
+         background-color: #f44336;
+         color: white;
+         border: none;
+         padding: 10px 20px;
+         border-radius: 5px;
+         cursor: pointer;
+     }
+     #save-btn {
+         background-color: #1a4a2e;
+         color: white;
+         border: none;
+         padding: 10px 20px;
+         border-radius: 5px;
+         cursor: pointer;
+     }
+     #save-btn:hover {
+         background-color: #ffd700;
+         color: #1a4a2e;
+     }
+     #cancel-btn:hover {
+         background-color: #ffd700;
+         color: #1a4a2e;
+     }
+     .toast {
+         position: fixed;
+         bottom: 20px;
+         right: 20px;
+         background-color: #333;
+         color: white;
+         padding: 15px 25px;
+         border-radius: 5px;
+         display: none;
+         z-index: 2000;
+     }
+     .toast.success {
+         background-color: #4caf50;
+     }
+     .toast.error {
+         background-color: #f44336;
+     }
+     /* Logout confirmation modal */
+     .modal-overlay {
+         position: fixed;
+         top: 0;
+         left: 0;
+         width: 100%;
+         height: 100%;
+         background: rgba(0, 0, 0, 0.5);
+         display: flex;
+         align-items: center;
+         justify-content: center;
+         z-index: 2000;
+         opacity: 0;
+         visibility: hidden;
+         transition: opacity 0.2s, visibility 0.2s;
+     }
+     .modal-overlay.visible {
+         opacity: 1;
+         visibility: visible;
+     }
+     .modal-box {
+         background: #fff;
+         border-radius: 12px;
+         padding: 30px;
+         max-width: 360px;
+         width: 90%;
+         text-align: center;
+         box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+     }
+     .modal-box p {
+         font-size: 16px;
+         color: #333;
+         margin-bottom: 24px;
+     }
+     .modal-buttons {
+         display: flex;
+         gap: 12px;
+         justify-content: center;
+     }
+     .modal-btn {
+         padding: 10px 24px;
+         border: none;
+         border-radius: 8px;
+         font-size: 15px;
+         font-weight: 500;
+         cursor: pointer;
+         transition: background-color 0.2s;
+     }
+     .modal-btn.cancel {
+         background: #e0e0e0;
+         color: #333;
+     }
+     .modal-btn.cancel:hover { background: #d0d0d0; }
+     .modal-btn.confirm {
+         background: #c0392b;
+         color: #fff;
+     }
+     .modal-btn.confirm:hover { background: #a93226; }
+     .mobile-menu-toggle {
+         display: none;
+         position: fixed;
+         top: 20px;
+         left: 20px;
+         z-index: 1001;
+         background: none;
+         border: none;
+         color: #1a4a2e;
+         font-size: 24px;
+         cursor: pointer;
+         padding: 5px;
+     }
+     @media (max-width: 768px) {
+         .mobile-menu-toggle {
+             display: block;
+         }
+         .sidebar {
+             width: 250px;
+         }
+         .main-content {
+             padding: 15px;
+         }
+         body.sidebar-open .main-content {
+             margin-left: 0;
+         }
+         .products-table {
+             box-shadow: none;
+         }
+         table {
+             font-size: 0.9em;
+         }
+         th, td {
+             padding: 12px;
+         }
+         .action-btn {
+             min-height: 44px;
+             display: flex;
+             align-items: center;
+             justify-content: center;
+             padding: 8px 12px;
+             font-size: 1em;
+             margin: 4px 0;
+         }
+         .actions-column {
+             display: flex;
+             flex-direction: column;
+             gap: 8px;
+         }
+         .modal-content {
+             margin: 0 auto;
+             width: 100%;
+             max-width: 100%;
+             height: 100%;
+             border-radius: 0;
+         }
+         .form-group input,
+         .form-group select,
+         .form-group textarea {
+             padding: 14px;
+             font-size: 1.1em;
+         }
+         .form-actions {
+             gap: 12px;
+             margin-top: 20px;
+         }
+         #cancel-btn,
+         #save-btn {
+             padding: 14px 20px;
+             font-size: 1.1em;
+             min-height: 48px;
+         }
+     }
     </style>
 </head>
 <body>
+    <button class="mobile-menu-toggle" id="mobileMenuToggle">☰</button>
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
     <div class="sidebar">
         <h2>Susan's Co</h2>
         <nav>
@@ -290,6 +428,7 @@
                 <li><a href="admin-products.html" class="active"><span>Products</span></a></li>
                 <li><a href="admin-messages.html"><span>Messages</span></a></li>
                 <li><a href="admin-orders.html"><span>Orders</span></a></li>
+                <li><a href="shop.html" target="_blank"><span>🛒 Back to Shop</span></a></li>
                 <li><a href="#" id="logout-link"><span>Logout</span></a></li>
             </ul>
         </nav>
@@ -367,6 +506,17 @@
 
     <!-- Toast Notification -->
     <div id="toast" class="toast"></div>
+
+    <!-- Logout Confirmation Modal -->
+    <div class="modal-overlay" id="logoutModal">
+      <div class="modal-box">
+        <p>Are you sure you want to logout?</p>
+        <div class="modal-buttons">
+          <button class="modal-btn cancel" onclick="hideLogoutConfirm()">Cancel</button>
+          <button class="modal-btn confirm" onclick="doLogout()">Logout</button>
+        </div>
+      </div>
+    </div>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
@@ -613,9 +763,19 @@
             }
         }
 
-        // Handle logout
+        // Handle logout with confirmation
+        function showLogoutConfirm() {
+            document.getElementById('logoutModal').classList.add('visible');
+        }
+        function hideLogoutConfirm() {
+            document.getElementById('logoutModal').classList.remove('visible');
+        }
         async function handleLogout(e) {
             e.preventDefault();
+            showLogoutConfirm();
+        }
+        async function doLogout() {
+            hideLogoutConfirm();
             try {
                 await supabaseClient.auth.signOut();
                 window.location.href = 'admin-login.html';
@@ -625,15 +785,24 @@
             }
         }
 
-        // Show toast notification
-        function showToast(message, type = 'success') {
-            toast.textContent = message;
-            toast.className = `toast ${type}`;
-            toast.style.display = 'block';
-            setTimeout(() => {
-                toast.style.display = 'none';
-            }, 3000);
-        }
+         // Show toast notification
+         function showToast(message, type = 'success') {
+             toast.textContent = message;
+             toast.className = `toast ${type}`;
+             toast.style.display = 'block';
+             setTimeout(() => {
+                 toast.style.display = 'none';
+             }, 3000);
+         }
+         
+         // Mobile menu toggle functionality
+         document.getElementById('mobileMenuToggle').addEventListener('click', function() {
+             document.body.classList.toggle('sidebar-open');
+         });
+         
+         document.getElementById('sidebarOverlay').addEventListener('click', function() {
+             document.body.classList.remove('sidebar-open');
+         });
     });
 </script>
 </body>
